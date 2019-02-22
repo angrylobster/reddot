@@ -6,33 +6,43 @@ class VotesControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "should get index" do
-    get votes_url, as: :json
+    get votes_url
+    assert_response :success
+  end
+
+  test "should get new" do
+    get new_vote_url
     assert_response :success
   end
 
   test "should create vote" do
     assert_difference('Vote.count') do
-      post votes_url, params: { vote: { vote: @vote.vote } }, as: :json
+      post votes_url, params: { vote: { vote: @vote.vote } }
     end
 
-    assert_response 201
+    assert_redirected_to vote_url(Vote.last)
   end
 
   test "should show vote" do
-    get vote_url(@vote), as: :json
+    get vote_url(@vote)
+    assert_response :success
+  end
+
+  test "should get edit" do
+    get edit_vote_url(@vote)
     assert_response :success
   end
 
   test "should update vote" do
-    patch vote_url(@vote), params: { vote: { vote: @vote.vote } }, as: :json
-    assert_response 200
+    patch vote_url(@vote), params: { vote: { vote: @vote.vote } }
+    assert_redirected_to vote_url(@vote)
   end
 
   test "should destroy vote" do
     assert_difference('Vote.count', -1) do
-      delete vote_url(@vote), as: :json
+      delete vote_url(@vote)
     end
 
-    assert_response 204
+    assert_redirected_to votes_url
   end
 end
