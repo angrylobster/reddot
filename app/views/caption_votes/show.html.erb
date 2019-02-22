@@ -1,0 +1,9 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Vote:</strong>
+  <%= @caption_vote.vote %>
+</p>
+
+<%= link_to 'Edit', edit_caption_vote_path(@caption_vote) %> |
+<%= link_to 'Back', caption_votes_path %>
