@@ -24,6 +24,6 @@
   },
   "homepage": "https://github.com/angrylobster/reddot#readme",
   "dependencies": {
-    "css-loader": "^2.1.0"
+    "axios": "^0.18.0"
   }
 }
