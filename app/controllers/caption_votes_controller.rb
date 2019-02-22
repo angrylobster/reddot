@@ -5,6 +5,7 @@ class CaptionVotesController < ApplicationController
   # GET /caption_votes.json
   def index
     @caption_votes = CaptionVote.all
+    render json: @caption_votes
   end
 
   # GET /caption_votes/1

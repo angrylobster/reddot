@@ -25,7 +25,10 @@ class CaptionsController < ApplicationController
   # POST /captions
   # POST /captions.json
   def create
-    @caption = Caption.new(caption_params)
+    jsonString = request.body.read
+    jsonHash = JSON.parse(jsonString)
+
+    @caption = Caption.new(jsonHash)
 
     respond_to do |format|
       if @caption.save
@@ -68,8 +71,12 @@ class CaptionsController < ApplicationController
       @caption = Caption.find(params[:id])
     end
 
+
     # Never trust parameters from the scary internet, only allow the white list through.
-    def caption_params
-      params.require(:caption).permit(:body)
-    end
+    # def caption_params
+    #   jsonString = request.body.read
+    #   jsonHash = JSON.parse(jsonString)
+    #   byebug
+    #   params.require(:caption).permit(:body)
+    # end
 end

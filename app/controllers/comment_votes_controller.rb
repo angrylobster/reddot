@@ -5,6 +5,7 @@ class CommentVotesController < ApplicationController
   # GET /comment_votes.json
   def index
     @comment_votes = CommentVote.all
+    render json: @comment_votes
   end
 
   # GET /comment_votes/1
