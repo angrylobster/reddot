@@ -22,5 +22,8 @@
   "bugs": {
     "url": "https://github.com/angrylobster/reddot/issues"
   },
-  "homepage": "https://github.com/angrylobster/reddot#readme"
+  "homepage": "https://github.com/angrylobster/reddot#readme",
+  "dependencies": {
+    "axios": "^0.18.0"
+  }
 }
