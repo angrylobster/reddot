@@ -31,19 +31,17 @@ end
 end
 
 20.times do
-  Vote.create(
+  CommentVote.create(
     vote: rand(1..2),
     comment_id: rand(1..10),
-    caption_id: 0,
     user_id: rand(1..5)
   )
 end
 
 20.times do
-  Vote.create(
+  CaptionVote.create(
     vote: rand(1..2),
     caption_id: rand(1..10),
-    comment_id: 0,
     user_id: rand(1..5)
   )
 end

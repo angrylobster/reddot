@@ -1,0 +1,2 @@
+module CaptionVotesHelper
+end
