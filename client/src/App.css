@@ -40,6 +40,11 @@ img{
   width: 100%;
 }
 
+input:focus{
+  outline: none;
+  color: rgb(85, 85, 85);
+}
+
 p{
   text-align: left;
   margin: 0;
@@ -58,6 +63,7 @@ small{
   border-radius: 5px;
   margin: 0 auto;
   margin-top: 50px;
+  margin-bottom: 50px;
   overflow: hidden;
 }
 
