@@ -1,26 +1,5 @@
 {
   "name": "reddot",
-  "version": "1.0.0",
-  "description": "This README would normally document whatever steps are necessary to get the application up and running.",
-  "main": "index.js",
-  "directories": {
-    "lib": "lib",
-    "test": "test"
-  },
-  "scripts": {
-    "start": "concurrently \"npm run server\" \"npm run client\"",
-    "server": "rails server -p 3001",
-    "client": "cd client/src && npm start",
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/angrylobster/reddot.git"
-  },
-  "author": "",
-  "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/angrylobster/reddot/issues"
-  },
-  "homepage": "https://github.com/angrylobster/reddot#readme"
+  "private": true,
+  "dependencies": {}
 }

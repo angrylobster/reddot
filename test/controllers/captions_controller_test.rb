@@ -6,33 +6,43 @@ class CaptionsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "should get index" do
-    get captions_url, as: :json
+    get captions_url
+    assert_response :success
+  end
+
+  test "should get new" do
+    get new_caption_url
     assert_response :success
   end
 
   test "should create caption" do
     assert_difference('Caption.count') do
-      post captions_url, params: { caption: { body: @caption.body } }, as: :json
+      post captions_url, params: { caption: { body: @caption.body } }
     end
 
-    assert_response 201
+    assert_redirected_to caption_url(Caption.last)
   end
 
   test "should show caption" do
-    get caption_url(@caption), as: :json
+    get caption_url(@caption)
+    assert_response :success
+  end
+
+  test "should get edit" do
+    get edit_caption_url(@caption)
     assert_response :success
   end
 
   test "should update caption" do
-    patch caption_url(@caption), params: { caption: { body: @caption.body } }, as: :json
-    assert_response 200
+    patch caption_url(@caption), params: { caption: { body: @caption.body } }
+    assert_redirected_to caption_url(@caption)
   end
 
   test "should destroy caption" do
     assert_difference('Caption.count', -1) do
-      delete caption_url(@caption), as: :json
+      delete caption_url(@caption)
     end
 
-    assert_response 204
+    assert_redirected_to captions_url
   end
 end

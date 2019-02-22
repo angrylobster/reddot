@@ -1,6 +1,5 @@
 class Vote < ApplicationRecord
-    belongs_to :comment
-    belongs_to :user, through :captions
-    belongs_to :user, through :comments
-    belongs_to :caption
+  belongs_to :user
+  belongs_to :comment
+  belongs_to :caption
 end
