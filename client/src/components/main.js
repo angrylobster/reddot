@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
 import Captions from './captions';
+import Signup from './signup';
+
 class Main extends Component {
   render() {
     return (
@@ -12,6 +14,7 @@ class Main extends Component {
                 alt="Caption this"
             />
             <Captions/>
+            <Signup/>
         </div>
       
     );
