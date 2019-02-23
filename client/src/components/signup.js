@@ -1,48 +1,52 @@
 import React, { Component } from 'react';
+const axios = require('axios');
 
 class Signup extends Component {
   constructor(){
     super();
     this.signUp = this.signUp.bind(this);
-    this.inputChange = this.inputChange.bind(this);
-
-    this.state = {
-        name: '',
-        email: '',
-        password: '',
-        password_confirmation: ''
-    }
-  }
-
-  inputChange(ev) {
-    this.setState({'${ev.target.name}':ev.target.value});
-
-    console.log(ev.target.name, ev.target.value);
-
-    console.log(this.state.name, this.state.email, this.state.password);
   }
 
   signUp() {
-    fetch('/users', {
-        method: 'POST',
-        header: {
-            'Accept': 'application/json',
-            'content-type': 'application/json'
-        },
-        body: JSON.stringify({
-          name: this.state.name,
-          email: this.state.email,
-          password: this.state.password,
-          password_confirmation: this.state.password_confirmation
-        })
-        
-    }).then(response => {
-        if (response.ok) { return response.json() } throw new Error('Request failed!');
-    }, networkError => {
-        console.log(networkError.message);
-    }).then(jsonResponse => {
-        return jsonResponse;
+    let name = document.querySelector('#root > div > div > form > input[type="text"]:nth-child(1)').value;
+    let email = document.querySelector('#root > div > div > form > input[type="email"]:nth-child(2)').value;
+    let password = document.querySelector('#root > div > div > form > input[type="password"]:nth-child(3)').value;
+    let password_confirmation = document.querySelector('#root > div > div > form > input[type="password"]:nth-child(4)').value;
+
+    axios.post('/users', {
+      name: name,
+      email: email,
+      password: password,
+      password_confirmation: password_confirmation
+    })
+    .then(function(response) {
+      console.log(response);
+    })
+    .catch(function(error) {
+      console.log(error)
     });
+    // fetch('/users', {
+    //     method: 'POST',
+    //     header: {
+    //         'Accept': 'application/json',
+    //         'content-type': 'application/json'
+    //     },
+    //     body: JSON.stringify({
+          // name: name,
+          // email: email,
+          // password: password,
+          // password_confirmation: password_confirmation
+    //     })
+        
+    // }).then(async response => {
+    //     let res = await response;
+    //     debugger
+    //     if (response.ok) { console.log(response.json()); return response.json(); } throw new Error('Request failed!');
+    // }, networkError => {
+    //     console.log(networkError.message);
+    // }).then(jsonResponse => {
+    //     return jsonResponse;
+    // });
   }
 
   render() {
@@ -50,27 +54,19 @@ class Signup extends Component {
         <form>
               <input type='text'
                 name='name'
-                placeholder='name'
-                value={this.state.name}
-                onChange={this.inputChange} />
+                placeholder='name'/>
  
               <input type='email'
                 name='email'
-                placeholder='email'
-                value={this.state.email}
-                onChange={this.inputChange} />
+                placeholder='email' />
  
               <input type='password'
                 name='password'
-                placeholder='password'
-                value={this.state.password}
-                onChange={this.inputChange} />
+                placeholder='password' />
  
               <input type='password'
                 name='password_confirmation'
-                placeholder='re-type password'
-                value={this.state.password_confirmation}
-                onChange={this.inputChange} />
+                placeholder='re-type password' />
             <input onClick={this.signUp} defaultValue="sign up"/>
           </form>
       

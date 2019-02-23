@@ -11,9 +11,20 @@ class Users::RegistrationsController < Devise::RegistrationsController
 
   # POST /resource
   def create
-    puts "WAHAHAHA"
-    byebug
-    super
+    jsonString = request.body.read
+    jsonHash = JSON.parse(jsonString)
+
+    @user = User.new(jsonHash)
+    
+    respond_to do |format|
+      if @user.save
+        format.json { render json: {response: "succesfully created."} }
+        
+      else
+        format.json { render json: {response: "User creation failed. Probably: (Validation failed/Not unique)"} }
+      end
+    end
+    # super
   end
 
   # GET /resource/edit
