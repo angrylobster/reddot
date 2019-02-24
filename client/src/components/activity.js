@@ -25,14 +25,14 @@ class Activity extends Component {
 
     getActivityCards(){
         return this.state.captions.map((caption, index) => {
-            console.log(caption)
             return (
                 <ActivityCard
-                    action='wrote'
-                    linkType='caption'
+                    verb='wrote'
+                    noun='caption'
                     link='#'
-                    user={ caption.user_id }
+                    name={ caption.name }
                     key={ index + caption}
+                    date={ caption.created_at }
                 />
             )
         })
