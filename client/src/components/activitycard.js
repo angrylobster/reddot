@@ -8,24 +8,20 @@ class ActivityCard extends Component {
         }
     }
 
-    generateCardContent(type){
-        switch(type){
-            case 'like':
-                return(
-                    <small
-                        className="text-dark"
-                    >
-                        {this.props.user} liked a {this.props.linkType}.
-                    </small>
-                )
-        }
+    generateCardContent(props){
+        return(
+            <small
+                className="text-dark"
+            >
+                {props.user} {props.action} a <a href={ props.link }>{ props.linkType }</a>.
+            </small>
+        )
     }
 
     render() {
         return (
             <div className="d-flex p-1">
-                { this.generateCardContent(this.props.type) }
-                {/* <small className="text-dark">Someone upvoted something.</small> */}
+                { this.generateCardContent(this.props) }
             </div>
         );
     }
