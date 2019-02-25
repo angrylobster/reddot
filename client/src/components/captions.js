@@ -67,7 +67,7 @@ class NewCaption extends Component{
 
     postCaption(input) {
       axios.post('/captions.json', {
-          body: input,
+          caption: input,
           user_id: 0 //placeholder
       })
           .then(function(response) {
