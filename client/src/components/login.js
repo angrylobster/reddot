@@ -1,11 +1,10 @@
 import React, { Component } from 'react';
-import Axios from 'axios';
 
 class Login extends Component {
 
     constructor(){
         super();
-        this.submit = this.submit.bind(this)
+        this.doLogin = this.doLogin.bind(this)
         this.emailChangeHandler = this.emailChangeHandler.bind(this)
         this.passwordChangeHandler = this.passwordChangeHandler.bind(this)
 
@@ -24,26 +23,8 @@ class Login extends Component {
         this.setState({ password: e.target.value });
     }
 
-    submit(e){
-        e.preventDefault();
-        Axios({
-            method: 'POST',
-            url: '/users/sign_in',
-            data: {
-                user: {
-                    email: this.state.email,
-                    password: this.state.password
-                }
-            }
-        })
-        .then(response => {
-            console.log(response);
-        })
-        .catch(error => {
-            this.setState({
-                error: 'Invalid username or password!'
-            })
-        });
+    doLogin(e){
+        this.props.login(e, this.state.email, this.state.password);
     }
 
     getLoginErrorDiv(){
@@ -52,7 +33,7 @@ class Login extends Component {
                 className="text-danger d-block"
                 id="login-error"
             >
-                { this.state.error }
+                { this.props.error }
             </small>
         )
     }
@@ -72,11 +53,11 @@ class Login extends Component {
     render() {
         return (
             <form
-                onSubmit={ e => { this.submit(e) }} 
+                onSubmit={ e => { this.doLogin(e) }} 
                 id="login-form"
             >
                 <div className="form-group">
-                    { this.state.error ? this.getLoginErrorDiv() : null }
+                    { this.props.error ? this.getLoginErrorDiv() : null }
                     <label htmlFor="exampleInputEmail1">Email address</label>
                     <input 
                         type="email" 
