@@ -64,8 +64,12 @@ class CaptionsController < ApplicationController
   # PATCH/PUT /captions/1
   # PATCH/PUT /captions/1.json
   def update
+    jsonString = request.body.read
+    jsonHash = JSON.parse(jsonString)
+    @caption = Caption.where(id: request.params["id"])
+    
     respond_to do |format|
-      if @caption.update(caption_params)
+      if @caption.update(jsonHash)
         format.html { redirect_to @caption, notice: 'Caption was successfully updated.' }
         format.json { render :show, status: :ok, location: @caption }
       else
