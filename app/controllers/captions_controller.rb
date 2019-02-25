@@ -8,6 +8,25 @@ class CaptionsController < ApplicationController
     render json: @captions
   end
 
+  def activity
+    @activities = Array.new
+
+    Caption.select('captions.*', 'users.name').joins(:user).find_each(start: Caption.all.count-10, finish: Caption.all.count) do |caption|
+      @activities.push(caption)
+    end
+    Comment.select('comments.*', 'users.name').joins(:user).find_each(start: Comment.all.count-10, finish: Comment.all.count) do |comment|
+      @activities.push(comment)
+    end
+    CaptionVote.select('caption_votes.*', 'users.name').joins(:user).find_each(start: CaptionVote.all.count-10, finish: CaptionVote.all.count) do |captionVote|
+      @activities.push(captionVote)
+    end
+    CommentVote.select('comment_votes.*', 'users.name').joins(:user).find_each(start: CommentVote.all.count-10, finish: CommentVote.all.count) do |commentVote|
+      @activities.push(commentVote)
+    end
+
+    render json: @activities
+  end
+
   # GET /captions/1
   # GET /captions/1.json
   def show
@@ -27,7 +46,7 @@ class CaptionsController < ApplicationController
   def create
     jsonString = request.body.read
     jsonHash = JSON.parse(jsonString)
-
+    jsonHash['user_id'] = current_user.id
     @caption = Caption.new(jsonHash)
 
     respond_to do |format|

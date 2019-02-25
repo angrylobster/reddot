@@ -1,4 +1,6 @@
 Rails.application.routes.draw do
+  get '/activity', to: 'captions#activity'
+
   resources :caption_votes
   resources :comment_votes
   devise_for :users, controllers: { sessions: 'sessions', registrations: 'registrations' }

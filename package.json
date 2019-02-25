@@ -12,7 +12,7 @@
     "test": "test"
   },
   "scripts": {
-    "start": "concurrently \"npm run server\" \"npm run client\"",
+    "start": "concurrently --handle-input \"npm run server\" \"npm run client\"",
     "server": "rails server -p 3001",
     "client": "cd client/src && npm start",
     "test": "echo \"Error: no test specified\" && exit 1"
