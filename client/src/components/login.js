@@ -5,28 +5,45 @@ class Login extends Component {
 
     constructor(){
         super();
-        this.submit = this.submit.bind(this)
+        this.submit = this.submit.bind(this);
+        this.trackEmail = this.trackEmail.bind(this);
+        this.trackPassword = this.trackPassword.bind(this);
+        this.state = {
+            email: "",
+            password: ""
+        }
     }
 
     submit(e){
         e.preventDefault();
-
         Axios({
             method: 'POST',
             url: '/users/sign_in',
             data: {
                 user: {
-                    email: 'dario@yahoo.com',
-                    password: 'ReddotSG'
+                    email: this.state.email,
+                    password: this.state.password
                 }
             }
         })
-          .then(function (response) {
+        .then(response => {
             console.log(response);
-          })
-          .catch(function (error) {
+        })
+        .catch(error => {
             console.log(error);
-          });
+        });
+    }
+
+    trackEmail(e){
+        this.setState({
+            email: e.target.value
+        })
+    }
+
+    trackPassword(e){
+        this.setState({
+            password: e.target.value
+        })
     }
 
     render() {
@@ -37,10 +54,12 @@ class Login extends Component {
                 <input
                     name="email"
                     placeholder="Email"
+                    onChange={ this.trackEmail }
                 />
                 <input
                     name="password"
                     placeholder="Password"
+                    onChange={ this.trackPassword }
                 />
                 <input
                     type="submit"
