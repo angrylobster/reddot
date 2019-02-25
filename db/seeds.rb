@@ -54,3 +54,12 @@ Caption.all.each do |caption|
     end
   end
 end
+
+Comment.all.each do |comment|
+  CommentVote.all.each do |vote|
+    if comment.id.to_i == vote.comment_id.to_i
+      comment.total_votes = comment.total_votes + vote.vote
+      comment.save
+    end
+  end
+end
