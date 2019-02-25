@@ -47,6 +47,7 @@ class CaptionsController < ApplicationController
     jsonString = request.body.read
     jsonHash = JSON.parse(jsonString)
     jsonHash['user_id'] = current_user.id
+    byebug
     @caption = Caption.new(jsonHash)
 
     respond_to do |format|
