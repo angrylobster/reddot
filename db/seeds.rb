@@ -15,14 +15,14 @@
   )
 end
 
-40.times do 
+20.times do 
   Caption.create(
     body: Faker::Games::WorldOfWarcraft.quote,
     user_id: rand(1..5),
   )
 end
 
-20.times do
+40.times do
   Comment.create(
     body: Faker::Games::Overwatch.quote,
     user_id: rand(1..5),
@@ -32,16 +32,25 @@ end
 
 20.times do
   CommentVote.create(
-    vote: rand(1..2),
+    vote: rand(-1..1),
     comment_id: rand(1..10),
     user_id: rand(1..5)
   )
 end
 
-20.times do
+50.times do
   CaptionVote.create(
-    vote: rand(1..2),
-    caption_id: rand(1..10),
+    vote: rand(-1..1),
+    caption_id: rand(1..18),
     user_id: rand(1..5)
   )
+end
+
+Caption.all.each do |caption|
+  CaptionVote.all.each do |vote|
+    if caption.id.to_i == vote.caption_id.to_i
+      caption.total_votes = caption.total_votes + vote.vote
+      caption.save
+    end
+  end
 end
