@@ -6,12 +6,14 @@ class Activity extends Component {
 
     constructor(){
         super();
+        this.retrieveActivitiesData = this.retrieveActivitiesData.bind(this);
+
         this.state = {
             activities: []
         }
     }
 
-    componentDidMount(){
+    retrieveActivitiesData() {
         axios.get('/activity')
         .then(activities => {
             console.log(activities);
@@ -26,12 +28,14 @@ class Activity extends Component {
                     }
                 })
             });
-            console.log(this.state.activities);
-
         })
         .catch(error => {
             return error;
         })
+    }
+
+    componentDidMount(){
+        this.retrieveActivitiesData();
     }
 
     getActivityCards(){

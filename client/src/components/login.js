@@ -6,6 +6,23 @@ class Login extends Component {
     constructor(){
         super();
         this.submit = this.submit.bind(this)
+        this.emailChangeHandler = this.emailChangeHandler.bind(this)
+        this.passwordChangeHandler = this.passwordChangeHandler.bind(this)
+
+        this.state = {
+            email: '',
+            password: ''
+        }
+    }
+
+    emailChangeHandler(e) {
+        this.setState({ email: e.target.value });
+        console.log(this.state.email)
+    }
+
+    passwordChangeHandler(e) {
+        this.setState({ password: e.target.value });
+        console.log(this.state.password)
     }
 
     submit(e){
@@ -16,8 +33,8 @@ class Login extends Component {
             url: '/users/sign_in',
             data: {
                 user: {
-                    email: 'emmy.wisoky@gmail.com',
-                    password: 'ReddotSG'
+                    email: this.state.email,
+                    password: this.state.password
                 }
             }
         })
@@ -37,10 +54,12 @@ class Login extends Component {
                 <input
                     name="email"
                     placeholder="Email"
+                    onChange={this.emailChangeHandler}
                 />
                 <input
                     name="password"
                     placeholder="Password"
+                    onChange={this.passwordChangeHandler}
                 />
                 <input
                     type="submit"
