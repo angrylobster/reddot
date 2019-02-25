@@ -8,12 +8,30 @@ class Card extends Component {
         this.toggleVote = this.toggleVote.bind(this);
         this.state={
             upvoted: false,
-            downvoted: false
+            downvoted: false,
+            total_votes: 0
         }
     }
 
-    postVote(vote) {
+    componentDidMount(){
+        let totalVotesForCaption = 0;
+        this.props.votes.forEach(function(vote) {
+            totalVotesForCaption = totalVotesForCaption + vote.vote
+        })
+        this.setState({ total_votes: totalVotesForCaption })
+        //Update Caption total_votes
+        axios.put(`/captions/${this.props.caption_id}.json`, {
+            total_votes: 0
+        })
+            .then(function(response) {
+            console.log(response);
+        })
+            .catch(function(error) {
+            console.log(error);
+        });
+    }
 
+    postVote(vote) {
         if (!(this.props.current_user == null)) {
             console.log(this.props.current_user);
             axios.post('/caption_votes.json', {
@@ -131,7 +149,7 @@ class Card extends Component {
                         className="d-flex"
                     >
                         <small>{this.props.username}</small>
-                        <small>{this.props.total_votes}</small>
+                        <small>{this.state.total_votes > 1 ? `${this.state.total_votes} points`: `${this.state.total_votes} point`}</small>
                         <small>{this.getTimeTranspired(this.props.date)}</small>
                     </div>
                     <div>
