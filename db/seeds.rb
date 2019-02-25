@@ -17,14 +17,14 @@ end
 
 20.times do 
   Caption.create(
-    body: Faker::Games::WorldOfWarcraft.quote,
+    caption: Faker::Games::WorldOfWarcraft.quote,
     user_id: rand(1..5),
   )
 end
 
 40.times do
   Comment.create(
-    body: Faker::Games::Overwatch.quote,
+    comment: Faker::Games::Overwatch.quote,
     user_id: rand(1..5),
     caption_id: rand(1..20)
   )

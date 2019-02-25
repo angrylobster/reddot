@@ -16,7 +16,7 @@ class Activity extends Component {
     retrieveActivitiesData() {
         axios.get('/activity')
         .then(activities => {
-            console.log(activities);
+            // console.log(activities);
             this.setState({
                 activities: activities.data.sort((a, b) => {
                     if (a.updated_at > b.updated_at){
