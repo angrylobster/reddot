@@ -21,7 +21,10 @@ class Modal extends Component {
                         </button>
                     </div>
                     <div className="modal-body">
-                        <Login/>
+                        <Login
+                            login={ this.props.login }
+                            error={ this.props.error }
+                        />
                     </div>
                 </div>
             </div>
