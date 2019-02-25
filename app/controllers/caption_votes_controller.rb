@@ -25,15 +25,34 @@ class CaptionVotesController < ApplicationController
   # POST /caption_votes
   # POST /caption_votes.json
   def create
-    @caption_vote = CaptionVote.new(caption_vote_params)
-    # @caption = Caption.find()
-    respond_to do |format|
-      if @caption_vote.save
-        format.html { redirect_to @caption_vote, notice: 'Caption vote was successfully created.' }
-        format.json { render :show, status: :created, location: @caption_vote }
-      else
-        format.html { render :new }
-        format.json { render json: @caption_vote.errors, status: :unprocessable_entity }
+    jsonString = request.body.read
+    jsonHash = JSON.parse(jsonString)
+    
+    #CHECK IF VOTE EXIST. IF EXIST, EDIT Vote Integer. IF NOT, CREATE Vote.
+    if CaptionVote.where(user_id: jsonHash['user_id'], caption_id: jsonHash['caption_id']).any?
+      #Vote Entry Exist. Update Vote
+      @caption_vote = CaptionVote.where(user_id: jsonHash['user_id'], caption_id: jsonHash['caption_id'])
+      
+      respond_to do |format|
+        if @caption_vote.update(jsonHash)
+          format.html { redirect_to @caption_vote, notice: 'Caption vote was successfully updated.' }
+          format.json { render :show, status: :ok, location: @caption_vote }
+        else
+          format.html { render :edit }
+          format.json { render json: @caption_vote.errors, status: :unprocessable_entity }
+        end
+      end
+    else
+      #Vote Entry Don't Exist. Create Vote
+      @caption_vote = CaptionVote.new(jsonHash)
+      respond_to do |format|
+        if @caption_vote.save
+          format.html { redirect_to @caption_vote, notice: 'Caption vote was successfully created.' }
+          format.json { render :show, status: :created, location: @caption_vote }
+        else
+          format.html { render :new }
+          format.json { render json: @caption_vote.errors, status: :unprocessable_entity }
+        end
       end
     end
   end

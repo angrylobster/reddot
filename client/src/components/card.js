@@ -1,15 +1,34 @@
 import React, { Component } from 'react';
-
+const axios = require('axios');
 class Card extends Component {
 
     constructor(){
         super();
+        this.postVote = this.postVote.bind(this);
         this.toggleVote = this.toggleVote.bind(this);
         this.state={
             upvoted: false,
             downvoted: false
         }
     }
+
+    postVote(vote) {
+
+        if (!(this.props.current_user == null)) {
+            console.log(this.props.current_user);
+            axios.post('/caption_votes.json', {
+                vote: vote,
+                user_id: this.props.current_user.id,
+                caption_id: this.props.caption_id
+            })
+                .then(function(response) {
+                console.log(response);
+            })
+                .catch(function(error) {
+                console.log(error);
+            });
+        }
+      }
 
     toggleVote(arrowClicked){
         if (arrowClicked === 'down'){
@@ -19,12 +38,14 @@ class Card extends Component {
                     downvoted: false
                 })
                 //make vote to 0
+                this.postVote(0)
             } else {
                 this.setState({
                     upvoted: false,
                     downvoted: true
                 })
                 //make vote to -1
+                this.postVote(-1)
             }
         } else {
             if (this.state.upvoted){
@@ -32,11 +53,13 @@ class Card extends Component {
                     upvoted: false,
                     downvoted: false
                 })
+                this.postVote(0)
             } else {
                 this.setState({
                     upvoted: true,
                     downvoted: false
                 })
+                this.postVote(1)
             }
         }
     }
