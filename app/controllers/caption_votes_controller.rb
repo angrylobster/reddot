@@ -26,7 +26,7 @@ class CaptionVotesController < ApplicationController
   # POST /caption_votes.json
   def create
     @caption_vote = CaptionVote.new(caption_vote_params)
-
+    # @caption = Caption.find()
     respond_to do |format|
       if @caption_vote.save
         format.html { redirect_to @caption_vote, notice: 'Caption vote was successfully created.' }
