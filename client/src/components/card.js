@@ -63,6 +63,33 @@ class Card extends Component {
         }
     }
 
+    getTimeTranspired(date){
+        let timeTranspired;
+        let diffMilliseconds = Date.now() - Date.parse(date);
+        let diff = {
+            seconds: (diffMilliseconds / 1000).toFixed(1),
+            minutes: (diffMilliseconds / (1000 * 60)).toFixed(1),
+            hours: (diffMilliseconds / (1000 * 60 * 60)).toFixed(1),
+            days: (diffMilliseconds / (1000 * 60 * 60 * 24)).toFixed(1)
+        }
+
+        if (diff.seconds < 60) {
+            timeTranspired = diff.seconds + " seconds ago"
+        } else if (diff.minutes < 60) {
+            timeTranspired = diff.minutes + " minutes ago"
+        } else if (diff.hours < 24) {
+            timeTranspired = diff.hours + " hours ago"
+        } else {
+            timeTranspired = diff.days + " days ago"
+        }
+
+        return (
+            <small>
+                { timeTranspired }
+            </small>
+        )
+    }
+
     render() {
         return (
             <div className="d-flex p-2">
@@ -78,12 +105,14 @@ class Card extends Component {
                     <div
                         className="d-flex"
                     >
-                        <small>Username</small>
-                        <small>1000 points</small>
-                        <small>59 mins ago</small>
+                        <small>{this.props.username}</small>
+                        <small>{this.props.total_votes}</small>
+                        <small>{this.getTimeTranspired(this.props.date)}</small>
                     </div>
                     <div>
-                        <p>This is a caption about something people said some time ago but nobody knows what they meant so some people are asking about it.</p>
+                        <p>
+                            {this.props.caption}
+                        </p>
                     </div>
                 </div>
             </div>
