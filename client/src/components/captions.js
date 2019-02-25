@@ -17,14 +17,12 @@ class Captions extends Component {
   retrieveCaptionsData() {
       axios.get('/captions')
       .then(captions => {
-          console.log(captions.data);
-          console.log(captions.data[0].users);
-
           this.setState({
+              //Save in state, all captions sorted by total_votes
               captions: captions.data.sort((a, b) => {
-                  if (a.updated_at > b.updated_at){
+                  if (a.total_votes > b.total_votes){
                       return -1;
-                  } else if (a.updated_at < b.updated_at){
+                  } else if (a.total_votes < b.total_votes){
                       return 1;
                   } else {
                       return 0;
@@ -43,9 +41,18 @@ class Captions extends Component {
   }
 
   getCaptionCards(){
-      return this.state.captions.slice(0,5).map((caption, index) => {
+      return this.state.captions.slice(0,4).map((caption, index) => {
           return (
-            <h1>hi</h1>
+            <Card
+              caption={ caption.caption }
+              username={ caption.name }
+              total_votes={ caption.total_votes }
+              caption_id={ caption.id }
+              user_id={ caption.user_id }
+              comments={ caption.comments }
+              votes={ caption.caption_votes }
+              date={ caption.updated_at }
+             />
           )
       })
   }
@@ -53,10 +60,7 @@ class Captions extends Component {
     render() {
         return (
             <div>
-                <Card/>
-                <Card/>
-                <Card/>
-                <Card/>
+                { this.getCaptionCards() }
                 <NewCaption/>
             </div>
         );
