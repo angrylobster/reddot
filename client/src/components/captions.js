@@ -62,6 +62,7 @@ class Captions extends Component {
               comments={ caption.comments }
               votes={ caption.caption_votes }
               date={ caption.updated_at }
+              current_user={ this.state.user }
              />
           )
       })
