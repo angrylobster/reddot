@@ -18,11 +18,13 @@ class Card extends Component {
                     upvoted: false,
                     downvoted: false
                 })
+                //make vote to 0
             } else {
                 this.setState({
                     upvoted: false,
                     downvoted: true
                 })
+                //make vote to -1
             }
         } else {
             if (this.state.upvoted){

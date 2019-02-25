@@ -10,16 +10,18 @@ class Captions extends Component {
       this.retrieveCaptionsData = this.retrieveCaptionsData.bind(this);
 
       this.state = {
-          captions: []
+          captions: [],
+          user: ""
       }
   }
 
   retrieveCaptionsData() {
       axios.get('/captions')
-      .then(captions => {
+      .then(json => {
+          //Set caption state to have latest captions
           this.setState({
               //Save in state, all captions sorted by total_votes
-              captions: captions.data.sort((a, b) => {
+              captions: json.data.captions.sort((a, b) => {
                   if (a.total_votes > b.total_votes){
                       return -1;
                   } else if (a.total_votes < b.total_votes){
@@ -29,7 +31,15 @@ class Captions extends Component {
                   }
               })
           });
+
+          //Set user state to current user
+          this.setState({
+            //Save in state, all captions sorted by total_votes
+            user: json.data.user
+        });
+
           console.log(this.state.captions);
+          console.log(this.state.user);
       })
       .catch(error => {
           return error;
