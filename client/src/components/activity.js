@@ -6,15 +6,17 @@ class Activity extends Component {
 
     constructor(){
         super();
+        this.retrieveActivitiesData = this.retrieveActivitiesData.bind(this);
+
         this.state = {
             activities: []
         }
     }
 
-    componentDidMount(){
+    retrieveActivitiesData() {
         axios.get('/activity')
         .then(activities => {
-            console.log(activities);
+            // console.log(activities);
             this.setState({
                 activities: activities.data.sort((a, b) => {
                     if (a.updated_at > b.updated_at){
@@ -26,12 +28,14 @@ class Activity extends Component {
                     }
                 })
             });
-            console.log(this.state.activities);
-
         })
         .catch(error => {
             return error;
         })
+    }
+
+    componentDidMount(){
+        this.retrieveActivitiesData();
     }
 
     getActivityCards(){

@@ -26,7 +26,7 @@ ActiveRecord::Schema.define(version: 2019_02_22_122918) do
   end
 
   create_table "captions", force: :cascade do |t|
-    t.text "body"
+    t.text "caption"
     t.bigint "user_id"
     t.integer "total_votes", default: 0
     t.datetime "created_at", null: false
@@ -45,7 +45,7 @@ ActiveRecord::Schema.define(version: 2019_02_22_122918) do
   end
 
   create_table "comments", force: :cascade do |t|
-    t.text "body"
+    t.text "comment"
     t.bigint "user_id"
     t.bigint "caption_id"
     t.integer "total_votes", default: 0
