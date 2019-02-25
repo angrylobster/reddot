@@ -11,18 +11,17 @@ class Login extends Component {
 
         this.state = {
             email: '',
-            password: ''
+            password: '',
+            error: ''
         }
     }
 
     emailChangeHandler(e) {
         this.setState({ email: e.target.value });
-        console.log(this.state.email)
     }
 
     passwordChangeHandler(e) {
         this.setState({ password: e.target.value });
-        console.log(this.state.password)
     }
 
     submit(e){
@@ -41,8 +40,21 @@ class Login extends Component {
             console.log(response);
         })
         .catch(error => {
-            console.log(error);
+            this.setState({
+                error: 'Invalid username or password!'
+            })
         });
+    }
+
+    getLoginErrorDiv(){
+        return (
+            <small
+                className="text-danger d-block"
+                id="login-error"
+            >
+                { this.state.error }
+            </small>
+        )
     }
 
     trackEmail(e){
@@ -61,23 +73,41 @@ class Login extends Component {
         return (
             <form
                 onSubmit={ e => { this.submit(e) }} 
+                id="login-form"
             >
-                <input
-                    name="email"
-                    placeholder="Email"
-                    onChange={this.emailChangeHandler}
-                />
-                <input
-                    name="password"
-                    placeholder="Password"
-                    onChange={this.passwordChangeHandler}
-                />
-                <input
-                    type="submit"
-                    value="Submit"
-                />
-            </form>
-            
+                <div className="form-group">
+                    { this.state.error ? this.getLoginErrorDiv() : null }
+                    <label htmlFor="exampleInputEmail1">Email address</label>
+                    <input 
+                        type="email" 
+                        className="form-control" 
+                        id="exampleInputEmail1" 
+                        name="email" 
+                        aria-describedby="emailHelp" 
+                        placeholder="Enter email"
+                        onChange={this.emailChangeHandler}
+                        autoComplete="on"
+                    />
+                </div>
+                <div className="form-group">
+                    <label htmlFor="exampleInputPassword1">Password</label>
+                    <input 
+                        type="password" 
+                        className="form-control" 
+                        id="exampleInputPassword1" 
+                        name="password" 
+                        placeholder="Password"
+                        onChange={this.passwordChangeHandler}
+                        autoComplete="on"
+                    />
+                </div>
+                <button 
+                    type="submit" 
+                    className="btn btn-primary"
+                >
+                    Submit
+                </button>
+            </form>     
         );
     }
 }

@@ -1,17 +1,21 @@
 import React, { Component } from 'react';
 import Main from './components/main';
 import Activity from './components/activity';
-import Login from './components/login';
+import Navbar from './components/navbar';
+import Modal from './components/modal';
 import './App.css';
 
 class App extends Component {
     render() {
         return (
-            <div className="App">
-            <Login/>
-                <Main/>
-                <Activity/>
-            </div>
+            <React.Fragment>
+                <Navbar/>
+                <Modal/>
+                <div className="App">
+                    <Main/>
+                    <Activity/>
+                </div>
+            </React.Fragment>
         );
     }
 }
