@@ -4,8 +4,9 @@ class CaptionsController < ApplicationController
   # GET /captions
   # GET /captions.json
   def index #All captions and their relevant data. For caption cards.
+    @current_user = current_user
     @captions = Caption.select('captions.*', 'users.name', 'users.email', 'comments', 'caption_votes').joins(:user, :comments, :caption_votes)
-    render json: @captions
+    render json: {captions: @captions, user: @current_user}
   end
 
   def activity #All types of activities. For recent activity.
