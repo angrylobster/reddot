@@ -7,16 +7,17 @@ class Activity extends Component {
     constructor(){
         super();
         this.state = {
-            captions: []
+            activities: []
         }
     }
 
     componentDidMount(){
-        axios.get('/captions')
-        .then(captions => {
+        axios.get('/activity')
+        .then(activities => {
+            console.log(activities);
             this.setState({
-                captions: captions.data.sort((a, b) => {
-                    if (a.updated_at > b. updated_at){
+                activities: activities.data.sort((a, b) => {
+                    if (a.updated_at > b.updated_at){
                         return -1;
                     } else if (a.updated_at < b.updated_at){
                         return 1;
@@ -25,6 +26,8 @@ class Activity extends Component {
                     }
                 })
             });
+            console.log(this.state.activities);
+
         })
         .catch(error => {
             return error;
@@ -32,15 +35,15 @@ class Activity extends Component {
     }
 
     getActivityCards(){
-        return this.state.captions.slice(0,10).map((caption, index) => {
+        return this.state.activities.slice(0,10).map((activity, index) => {
             return (
                 <ActivityCard
                     verb='wrote'
-                    noun='caption'
+                    noun='activity'
                     link='#'
-                    name={ caption.name }
-                    key={ index + caption}
-                    date={ caption.updated_at }
+                    name={ activity.name }
+                    key={ index + activity}
+                    date={ activity.updated_at }
                 />
             )
         })

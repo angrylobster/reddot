@@ -16,7 +16,7 @@ class Login extends Component {
             url: '/users/sign_in',
             data: {
                 user: {
-                    email: 'dario@yahoo.com',
+                    email: 'emmy.wisoky@gmail.com',
                     password: 'ReddotSG'
                 }
             }

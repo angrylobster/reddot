@@ -48,6 +48,7 @@ ActiveRecord::Schema.define(version: 2019_02_22_122918) do
     t.text "body"
     t.bigint "user_id"
     t.bigint "caption_id"
+    t.integer "total_votes", default: 0
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["caption_id"], name: "index_comments_on_caption_id"
