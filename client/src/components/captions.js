@@ -4,6 +4,52 @@ const axios = require('axios');
 
 
 class Captions extends Component {
+
+  constructor(){
+      super();
+      this.retrieveCaptionsData = this.retrieveCaptionsData.bind(this);
+
+      this.state = {
+          captions: []
+      }
+  }
+
+  retrieveCaptionsData() {
+      axios.get('/captions')
+      .then(captions => {
+          console.log(captions.data);
+          console.log(captions.data[0].users);
+
+          this.setState({
+              captions: captions.data.sort((a, b) => {
+                  if (a.updated_at > b.updated_at){
+                      return -1;
+                  } else if (a.updated_at < b.updated_at){
+                      return 1;
+                  } else {
+                      return 0;
+                  }
+              })
+          });
+          console.log(this.state.captions);
+      })
+      .catch(error => {
+          return error;
+      })
+  }
+
+  componentDidMount(){
+      this.retrieveCaptionsData();
+  }
+
+  getCaptionCards(){
+      return this.state.captions.slice(0,5).map((caption, index) => {
+          return (
+            <h1>hi</h1>
+          )
+      })
+  }
+
     render() {
         return (
             <div>

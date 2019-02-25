@@ -5,13 +5,24 @@ class Login extends Component {
 
     constructor(){
         super();
-        this.submit = this.submit.bind(this);
-        this.trackEmail = this.trackEmail.bind(this);
-        this.trackPassword = this.trackPassword.bind(this);
+        this.submit = this.submit.bind(this)
+        this.emailChangeHandler = this.emailChangeHandler.bind(this)
+        this.passwordChangeHandler = this.passwordChangeHandler.bind(this)
+
         this.state = {
-            email: "",
-            password: ""
+            email: '',
+            password: ''
         }
+    }
+
+    emailChangeHandler(e) {
+        this.setState({ email: e.target.value });
+        console.log(this.state.email)
+    }
+
+    passwordChangeHandler(e) {
+        this.setState({ password: e.target.value });
+        console.log(this.state.password)
     }
 
     submit(e){
@@ -54,12 +65,12 @@ class Login extends Component {
                 <input
                     name="email"
                     placeholder="Email"
-                    onChange={ this.trackEmail }
+                    onChange={this.emailChangeHandler}
                 />
                 <input
                     name="password"
                     placeholder="Password"
-                    onChange={ this.trackPassword }
+                    onChange={this.passwordChangeHandler}
                 />
                 <input
                     type="submit"
