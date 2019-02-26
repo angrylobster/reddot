@@ -19,9 +19,10 @@ class Captions extends Component {
       axios.get('/captions')
       .then(json => {
           //Set caption state to have latest captions
+          console.log(json)
           this.setState({
               //Save in state, all captions sorted by total_votes
-              captions: json.data.captions.sort((a, b) => {
+              captions: json.data.sort((a, b) => {
                   if (a.total_votes > b.total_votes){
                       return -1;
                   } else if (a.total_votes < b.total_votes){
@@ -51,10 +52,10 @@ class Captions extends Component {
   }
 
   getCaptionCards(){
-      return this.state.captions.slice(0,4).map((caption, index) => {
+      return this.state.captions.map((caption, index) => {
           return (
             <Card
-              caption={ caption.caption }
+              caption={ caption.caption_text }
               username={ caption.name }
               total_votes={ caption.total_votes }
               caption_id={ caption.id }
@@ -63,6 +64,8 @@ class Captions extends Component {
               votes={ caption.caption_votes }
               date={ caption.updated_at }
               current_user={ this.state.user }
+              key={ index + caption }
+              id={ index + caption.id }
              />
           )
       })

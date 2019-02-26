@@ -14,21 +14,17 @@ class Card extends Component {
     }
 
     componentDidMount(){
-        let totalVotesForCaption = 0;
-        this.props.votes.forEach(function(vote) {
-            totalVotesForCaption = totalVotesForCaption + vote.vote
-        })
-        this.setState({ total_votes: totalVotesForCaption })
+        this.setState({ total_votes: this.props.total_votes })
         //Update Caption total_votes
-        axios.put(`/captions/${this.props.caption_id}.json`, {
-            total_votes: 0
-        })
-            .then(function(response) {
-            console.log(response);
-        })
-            .catch(function(error) {
-            console.log(error);
-        });
+        // axios.put(`/captions/${this.props.caption_id}.json`, {
+        //     total_votes: 0
+        // })
+        //     .then(function(response) {
+        //     console.log(response);
+        // })
+        //     .catch(function(error) {
+        //     console.log(error);
+        // });
     }
 
     postVote(vote) {

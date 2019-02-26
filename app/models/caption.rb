@@ -6,10 +6,12 @@ class Caption < ApplicationRecord
   def JSON
     result = {
       :id => self.id,
+      :name => self.name,
       :caption_text => self.caption,
+      :caption_votes => self.caption_votes,
       :total_votes => self.total_votes,
       :created_at => self.created_at,
-      :updated_at => self.updated_at
+      :updated_at => self.updated_at,
     }
     result[:comments] = self.get_comments
     return result

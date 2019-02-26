@@ -4,7 +4,7 @@ class CaptionsController < ApplicationController
   # GET /captions
   # GET /captions.json
   def index
-    @captions = Caption.all
+    @captions = Caption.all.left_outer_joins(:user).distinct.select('captions.*', 'users.name')
     @captions = @captions.map do |caption|
       caption.JSON
     end
