@@ -12,7 +12,7 @@ class CaptionsController < ApplicationController
         comment[:name] = User.find(comment[:poster_id]).name
       end
     end
-    render json: @captions
+    render json: {captions: @captions, user: current_user}
   end
 
   def activity #All types of activities. For recent activity.

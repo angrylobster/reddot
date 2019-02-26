@@ -172,7 +172,7 @@ class Card extends Component {
                         date={ comment.updated_at }
                         current_user={ this.state.user }
                         key={ index + comment }
-                        id={ index + comment.id }
+                        id={ index + comment.name }
                     />
                 )
             })
