@@ -27,7 +27,7 @@ class Caption < ApplicationRecord
       hash[:poster_id] = comment.user_id
       hash[:created_at] = comment.created_at
       hash[:updated_at] = comment.updated_at
-      hash[:test] = comment.user.name
+      hash[:name] = comment.user.name
       result.push(hash)
     end
     return result

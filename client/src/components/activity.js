@@ -40,10 +40,29 @@ class Activity extends Component {
 
     getActivityCards(){
         return this.state.activities.slice(0,10).map((activity, index) => {
+            let verb = '';
+            let noun = '';
+
+            console.log(Object.keys(activity)[1])
+            switch(Object.keys(activity)[1]){
+                case 'caption':
+                    verb = 'wrote';
+                    noun = 'caption';
+                    break;
+                case 'vote':
+                    verb = 'voted';
+                    noun = 'comment/caption';
+                    break;
+                case 'comment':
+                    verb = 'wrote';
+                    noun = 'comment';
+                    break;
+            }
+
             return (
                 <ActivityCard
-                    verb='wrote'
-                    noun='activity'
+                    verb={ verb }
+                    noun={ noun }
                     link='#'
                     name={ activity.name }
                     key={ index + activity}
@@ -54,6 +73,7 @@ class Activity extends Component {
     }
 
     render() {
+        console.log(this.state.activities)
         return (
             <div
                 className="div__wrapper-utility"
