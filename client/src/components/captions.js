@@ -51,10 +51,10 @@ class Captions extends Component {
       return this.state.captions.map((caption, index) => {
           return (
             <Card
-              caption={ caption.caption_text }
-              username={ caption.name }
+              content={ caption.caption_text }
+              poster={ caption.name }
               total_votes={ caption.total_votes }
-              caption_id={ caption.id }
+              id={ caption.id }
               user_id={ caption.user_id }
               comments={ caption.comments }
               votes={ caption.caption_votes }

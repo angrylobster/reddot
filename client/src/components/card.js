@@ -6,6 +6,8 @@ class Card extends Component {
         super();
         this.postVote = this.postVote.bind(this);
         this.toggleVote = this.toggleVote.bind(this);
+        this.viewComments = this.viewComments.bind(this);
+        this.getComments = this.getComments.bind(this);
         this.state={
             upvoted: false,
             downvoted: false,
@@ -16,7 +18,7 @@ class Card extends Component {
     componentDidMount(){
         this.setState({ total_votes: this.props.total_votes })
         //Update Caption total_votes
-        // axios.put(`/captions/${this.props.caption_id}.json`, {
+        // axios.put(`/captions/${this.props.id}.json`, {
         //     total_votes: 0
         // })
         //     .then(function(response) {
@@ -33,7 +35,7 @@ class Card extends Component {
             axios.post('/caption_votes.json', {
                 vote: vote,
                 user_id: this.props.current_user.id,
-                caption_id: this.props.caption_id
+                caption_id: this.props.id
             })
                 .then(function(response) {
                 console.log(response);
@@ -129,6 +131,37 @@ class Card extends Component {
         )
     }
 
+    viewComments(){
+        console.log(this.props.comments[0])
+        if (this.props.comments.length !== 0){
+            this.setState({
+                comments: this.props.comments
+            })
+        }else {
+            console.log(this.props.comments.length)
+        }
+    }
+
+    getComments(){
+        return this.props.comments.map((comment, index) => {
+            return (
+                <Card
+                    content={ comment.comment_text }
+                    poster={ comment.user_id }
+                    total_votes={ comment.total_votes }
+                    id={ comment.id }
+                    user_id={ comment.user_id }
+                    comments={ null }
+                    votes={ null }
+                    date={ comment.updated_at }
+                    current_user={ this.state.user }
+                    key={ index + comment }
+                    id={ index + comment.id }
+                />
+            )
+        })
+    }
+
     render() {
         return (
             <div className="d-flex p-2">
@@ -141,17 +174,25 @@ class Card extends Component {
                 <div
                     className="w-100 pl-2"
                 >
-                    <div
-                        className="d-flex"
-                    >
-                        <small>{this.props.username}</small>
+                    <div className="d-flex">
+                        <small>{this.props.poster}</small>
                         <small>{this.state.total_votes > 1 ? `${this.state.total_votes} points`: `${this.state.total_votes} point`}</small>
                         <small>{this.getTimeTranspired(this.props.date)}</small>
                     </div>
-                    <div>
+                    <div
+                    >
                         <p>
-                            {this.props.caption}
+                            { this.props.content }
                         </p>
+                        <div className="d-flex">
+                            <small
+                                onClick={ this.viewComments }
+                            >
+                                view comments
+                            </small>
+                        </div>
+                        { this.state.comments ? this.getComments() : null }
+
                     </div>
                 </div>
             </div>
