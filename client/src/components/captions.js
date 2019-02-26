@@ -51,6 +51,7 @@ class Captions extends Component {
       return this.state.captions.map((caption, index) => {
           return (
             <Card
+              currentUser={ this.props.currentUser }
               content={ caption.caption_text }
               poster={ caption.name }
               total_votes={ caption.total_votes }
@@ -76,7 +77,7 @@ class Captions extends Component {
                 >
                     { this.getCaptionCards() }
                 </div>
-                <NewCaption/>
+                { this.props.currentUser ? <NewCaption/> : null }
             </React.Fragment>
         );
     }

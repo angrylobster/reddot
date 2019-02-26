@@ -43,7 +43,6 @@ class Activity extends Component {
             let verb = '';
             let noun = '';
 
-            console.log(Object.keys(activity)[1])
             switch(Object.keys(activity)[1]){
                 case 'caption':
                     verb = 'wrote';
@@ -73,7 +72,6 @@ class Activity extends Component {
     }
 
     render() {
-        console.log(this.state.activities)
         return (
             <div
                 className="div__wrapper-utility"
