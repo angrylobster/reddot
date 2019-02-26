@@ -4,7 +4,10 @@ class CaptionsController < ApplicationController
   # GET /captions
   # GET /captions.json
   def index
-    @captions = Caption.select('captions.*', 'users.name', 'users.email', 'comments', 'caption_votes').joins(:user, :comments, :caption_votes)
+    @captions = Caption.all
+    @captions = @captions.map do |caption|
+      caption.JSON
+    end
     render json: @captions
   end
 

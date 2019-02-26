@@ -17,9 +17,7 @@ class Captions extends Component {
   retrieveCaptionsData() {
       axios.get('/captions')
       .then(captions => {
-          console.log(captions.data);
-          console.log(captions.data[0].users);
-
+        console.log(captions);
           this.setState({
               captions: captions.data.sort((a, b) => {
                   if (a.updated_at > b.updated_at){
@@ -31,7 +29,6 @@ class Captions extends Component {
                   }
               })
           });
-          console.log(this.state.captions);
       })
       .catch(error => {
           return error;
