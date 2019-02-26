@@ -8,12 +8,13 @@ class Main extends Component {
         >
             <img
                 className="img__potd"
-                src="https://www.asiaone.com/sites/default/files/original_images/Apr2016/0401_gohyongwei2.jpg"
+                src={ this.props.currentImg.img }
                 alt="Caption this"
             />
             <Captions
               setCurrentUser={ this.props.setCurrentUser }
               currentUser={ this.props.currentUser }
+              currentImg={ this.props.currentImg }
             />
         </div>
       

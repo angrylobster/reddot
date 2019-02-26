@@ -1,11 +1,25 @@
-class PostController < ApplicationController
-  def store
-    #Upload image to cloudinary
-    @Value = Cloudinary::Uploader.upload(params["img"])
-    @Post = Post.new({ :img => @Value['secure_url'], :caption => params["caption"] })
-    @Post.save
+require 'nokogiri'
+require 'open-uri'
 
-    render json: @Post
-    #After storing post.  Find a new image
+class PostController < ApplicationController
+  def retrieve
+    @Post = Post.last
+    render json: { currentImg: @Post }
+  end
+
+  def create
+    # Fetch and parse HTML document
+    doc = Nokogiri::HTML(open('http://film-grab.com/?random'))
+    img = doc.css('img').attr('src').text
+    #Upload to Cloudinary
+    cloudinaryReturn = Cloudinary::Uploader.upload(img)
+    
+    #Create and save new Post/Img into db
+    @Post = Post.new({img: cloudinaryReturn['secure_url']})
+    if @Post.save
+      render json: { currentImg: @Post }
+    else
+      render json: @Post.errors
+    end
   end 
 end

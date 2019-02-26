@@ -77,7 +77,7 @@ class Captions extends Component {
                 >
                     { this.getCaptionCards() }
                 </div>
-                { this.props.currentUser ? <NewCaption/> : null }
+                { this.props.currentUser ? <NewCaption currentImg={ this.props.currentImg } /> : null }
             </React.Fragment>
         );
     }
@@ -86,9 +86,11 @@ class Captions extends Component {
 class NewCaption extends Component{
 
     postCaption(input) {
+        console.log(this.props.currentImg)
       axios.post('/captions.json', {
           caption: input,
-          user_id: 0 //placeholder
+          user_id: 0, //placeholder
+          post_id: this.props.currentImg.id
       })
           .then(function(response) {
           console.log(response);

@@ -15,10 +15,9 @@
   )
 end
 
-5.times do
+1.times do
   Post.create(
-    img: "https://res.cloudinary.com/dpe51lubf/image/upload/v1551172860/eoklbpu04fbf03cojvlu.jpgz",
-    caption: "WINNER"
+    img: "https://res.cloudinary.com/dpe51lubf/image/upload/v1551172860/eoklbpu04fbf03cojvlu.jpgz"
   )
 end
 
@@ -26,7 +25,7 @@ end
   Caption.create(
     caption: Faker::Games::WorldOfWarcraft.quote,
     user_id: rand(1..5),
-    post_id: rand(1..4), #default
+    post_id: 1, #default
     total_votes: 0 #default
   )
 end
