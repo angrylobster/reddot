@@ -1,6 +1,32 @@
 import React, { Component } from 'react';
+import Axios from 'axios';
 
 class Navbar extends Component{
+
+    constructor(){
+        super();
+        this.postImg = this.postImg.bind(this);
+        this.state = {
+        }
+    }
+
+    postImg() {
+        console.log("WTF")
+        Axios({
+            method: 'POST',
+            url: '/post',
+            data: {
+                img: "https://www.asiaone.com/sites/default/files/original_images/Apr2016/0401_gohyongwei2.jpg",
+                caption: "WOW quotes"
+            }
+        })
+        .then(response => {
+            console.log(response);
+        })
+        .catch(error => {
+            console.log(error)
+        });
+    }
 
     getLoginOrLogoutButton(){
         if (!this.props.currentUser){
@@ -24,6 +50,7 @@ class Navbar extends Component{
             )
         }
     }
+    
     render(){
         return (
             <nav className="navbar navbar-dark navbar-expand-lg bg-dark fixed-top text-white">
@@ -37,8 +64,20 @@ class Navbar extends Component{
                     <span className="navbar-toggler-icon"></span>
                 </button>
                 <div className="collapse navbar-collapse" id="navbarTogglerDemo02">
+                        <button 
+                            className="btn btn-outline-light"
+                            data-toggle="modal" 
+                            data-target="#exampleModal"
+                        >
+                            Login
+                        </button>
                     { this.getLoginOrLogoutButton() }
                 </div>
+                <button 
+                    onClick={this.postImg}
+                >
+                    ADMIN POST IMAGE
+                </button>
             </nav>
         )
     }
