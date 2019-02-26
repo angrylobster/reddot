@@ -130,6 +130,18 @@ class Card extends Component {
         )
     }
 
+    renderViewComments(){
+        if (this.props.renderViewComments === true){
+            return (
+                <small
+                    onClick={ this.viewComments }
+                >
+                    view comments
+                </small>
+            )
+        }
+    }
+
     viewComments(){
         console.log(this.props.comments[0])
         if (this.props.comments.length !== 0){
@@ -184,11 +196,7 @@ class Card extends Component {
                             { this.props.content }
                         </p>
                         <div className="d-flex">
-                            <small
-                                onClick={ this.viewComments }
-                            >
-                                view comments
-                            </small>
+                            { this.renderViewComments() }
                         </div>
                         { this.state.comments ? this.getComments() : null }
                     </div>

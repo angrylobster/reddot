@@ -63,6 +63,7 @@ class Captions extends Component {
               current_user={ this.state.user }
               key={ index + caption }
               id={ index + caption.id }
+              renderViewComments={ true }
              />
           )
       })
