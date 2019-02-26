@@ -11,7 +11,10 @@ class Main extends Component {
                 src="https://www.asiaone.com/sites/default/files/original_images/Apr2016/0401_gohyongwei2.jpg"
                 alt="Caption this"
             />
-            <Captions/>
+            <Captions
+              setCurrentUser={ this.props.setCurrentUser }
+              currentUser={ this.props.currentUser }
+            />
         </div>
       
     );

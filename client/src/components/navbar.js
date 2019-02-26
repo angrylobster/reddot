@@ -2,6 +2,28 @@ import React, { Component } from 'react';
 
 class Navbar extends Component{
 
+    getLoginOrLogoutButton(){
+        if (!this.props.currentUser){
+            return( 
+                <button 
+                    className="btn btn-outline-light"
+                    data-toggle="modal" 
+                    data-target="#exampleModal"
+                >
+                    Login
+                </button>
+            )
+        } else {
+            return (
+                <button
+                    className="btn btn-outline-light"
+                    onClick={ e => { this.props.logout(e) }}                
+                >
+                    Logout
+                </button>
+            )
+        }
+    }
     render(){
         return (
             <nav className="navbar navbar-dark navbar-expand-lg bg-dark fixed-top text-white">
@@ -15,13 +37,7 @@ class Navbar extends Component{
                     <span className="navbar-toggler-icon"></span>
                 </button>
                 <div className="collapse navbar-collapse" id="navbarTogglerDemo02">
-                        <button 
-                            className="btn btn-outline-light"
-                            data-toggle="modal" 
-                            data-target="#exampleModal"
-                        >
-                            Login
-                        </button>
+                    { this.getLoginOrLogoutButton() }
                 </div>
             </nav>
         )

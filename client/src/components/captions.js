@@ -11,7 +11,7 @@ class Captions extends Component {
 
       this.state = {
           captions: [],
-          user: ""
+          currentUser: null
       }
   }
 
@@ -19,10 +19,9 @@ class Captions extends Component {
       axios.get('/captions')
       .then(json => {
           //Set caption state to have latest captions
-          console.log(json)
           this.setState({
               //Save in state, all captions sorted by total_votes
-              captions: json.data.sort((a, b) => {
+              captions: json.data.captions.sort((a, b) => {
                   if (a.total_votes > b.total_votes){
                       return -1;
                   } else if (a.total_votes < b.total_votes){
@@ -30,14 +29,11 @@ class Captions extends Component {
                   } else {
                       return 0;
                   }
-              })
+              }),
+              currentUser: json.data.user
           });
-
+          this.props.setCurrentUser(json.data.user);
           //Set user state to current user
-          this.setState({
-            //Save in state, all captions sorted by total_votes
-            user: json.data.user
-        });
       })
       .catch(error => {
           return error;
@@ -46,6 +42,9 @@ class Captions extends Component {
 
   componentDidMount(){
       this.retrieveCaptionsData();
+      this.setState({
+        currentUser: this.props.currentUser
+      })
   }
 
   getCaptionCards(){
@@ -62,7 +61,7 @@ class Captions extends Component {
               date={ caption.updated_at }
               current_user={ this.state.user }
               key={ index + caption }
-              id={ index + caption.id }
+              id={ index + caption.name }
               renderViewComments={ true }
              />
           )
