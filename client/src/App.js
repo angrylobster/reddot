@@ -11,7 +11,7 @@ class App extends Component {
     constructor(){
         super();
         this.login = this.login.bind(this);
-        this.logout = this.logout.bind(this);29767 16158
+        this.logout = this.logout.bind(this);
         this.setCurrentUser = this.setCurrentUser.bind(this);
         this.setCurrentImg = this.setCurrentImg.bind(this);
         this.state = {
@@ -19,6 +19,20 @@ class App extends Component {
             currentUser: null,
             currentImg: "https://www.asiaone.com/sites/default/files/original_images/Apr2016/0401_gohyongwei2.jpg" //default img
         }
+    }
+
+    componentDidMount(){
+        Axios({
+            method: 'GET',
+            url: '/post',
+        })
+        .then(response => {
+            this.setState({currentImg: response.data.currentImg})
+            console.log(this.state.currentImg)
+        })
+        .catch(error => {
+            console.log(error)
+        });
     }
 
     setCurrentImg(img) {
@@ -97,6 +111,7 @@ class App extends Component {
                     <Main
                         setCurrentUser={ this.setCurrentUser }
                         currentUser={ this.state.currentUser }
+                        currentImg={ this.state.currentImg }
                     />
                     <Activity/>
                 </div>

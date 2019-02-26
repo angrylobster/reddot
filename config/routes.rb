@@ -1,6 +1,8 @@
 Rails.application.routes.draw do
   get '/activity', to: 'captions#activity'
-  post '/post', to: 'post#store'
+
+  get '/post', to: 'post#retrieve'
+  post '/post', to: 'post#create'
 
   resources :caption_votes
   resources :comment_votes

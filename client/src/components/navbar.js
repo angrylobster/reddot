@@ -19,7 +19,7 @@ class Navbar extends Component{
             }
         })
         .then(response => {
-            this.props.setCurrentImg(response.data)
+            this.props.setCurrentImg(response.data.currentImg)
         })
         .catch(error => {
             console.log(error)
