@@ -19,7 +19,6 @@ class Captions extends Component {
       axios.get('/captions')
       .then(json => {
           //Set caption state to have latest captions
-          console.log(json)
           this.setState({
               //Save in state, all captions sorted by total_votes
               captions: json.data.sort((a, b) => {
@@ -38,9 +37,6 @@ class Captions extends Component {
             //Save in state, all captions sorted by total_votes
             user: json.data.user
         });
-
-          console.log(this.state.captions);
-          console.log(this.state.user);
       })
       .catch(error => {
           return error;
@@ -73,10 +69,14 @@ class Captions extends Component {
 
     render() {
         return (
-            <div>
-                { this.getCaptionCards() }
+            <React.Fragment>
+                <div
+                    style={{overflowY: "scroll", height: '280px'}}
+                >
+                    { this.getCaptionCards() }
+                </div>
                 <NewCaption/>
-            </div>
+            </React.Fragment>
         );
     }
 }
