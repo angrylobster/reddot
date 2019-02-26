@@ -1,6 +1,32 @@
 import React, { Component } from 'react';
+import Axios from 'axios';
 
 class Navbar extends Component{
+
+    constructor(){
+        super();
+        this.postImg = this.postImg.bind(this);
+        this.state = {
+        }
+    }
+
+    postImg() {
+        console.log("WTF")
+        Axios({
+            method: 'POST',
+            url: '/post',
+            data: {
+                img: "https://www.asiaone.com/sites/default/files/original_images/Apr2016/0401_gohyongwei2.jpg",
+                caption: "WOW quotes"
+            }
+        })
+        .then(response => {
+            console.log(response);
+        })
+        .catch(error => {
+            console.log(error)
+        });
+    }
 
     render(){
         return (
@@ -22,7 +48,17 @@ class Navbar extends Component{
                         >
                             Login
                         </button>
+
+
+
+
+
                 </div>
+                <button 
+                    onClick={this.postImg}
+                >
+                    ADMIN POST IMAGE
+                </button>
             </nav>
         )
     }

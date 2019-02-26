@@ -1,0 +1,19 @@
+---
+development:
+  cloud_name: dpe51lubf
+  api_key: '164918638978623'
+  api_secret: L0os7X5hh1xoCiYtS3NNQNzZDRE
+  enhance_image_tag: true
+  static_file_support: false
+production:
+  cloud_name: dpe51lubf
+  api_key: '164918638978623'
+  api_secret: L0os7X5hh1xoCiYtS3NNQNzZDRE
+  enhance_image_tag: true
+  static_file_support: true
+test:
+  cloud_name: dpe51lubf
+  api_key: '164918638978623'
+  api_secret: L0os7X5hh1xoCiYtS3NNQNzZDRE
+  enhance_image_tag: true
+  static_file_support: false

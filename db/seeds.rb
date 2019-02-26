@@ -15,10 +15,19 @@
   )
 end
 
+5.times do
+  Post.create(
+    img: "https://res.cloudinary.com/dpe51lubf/image/upload/v1551172860/eoklbpu04fbf03cojvlu.jpgz",
+    caption: "WINNER"
+  )
+end
+
 20.times do 
   Caption.create(
     caption: Faker::Games::WorldOfWarcraft.quote,
     user_id: rand(1..5),
+    post_id: rand(1..4), #default
+    total_votes: 0 #default
   )
 end
 
@@ -26,25 +35,47 @@ end
   Comment.create(
     comment: Faker::Games::Overwatch.quote,
     user_id: rand(1..5),
-    caption_id: rand(1..20)
+    caption_id: rand(1..20),
+    total_votes: 0 #default
   )
 end
 
-20.times do
-  CommentVote.create(
-    vote: rand(-1..1),
-    comment_id: rand(1..10),
-    user_id: rand(1..5)
-  )
+def createCommentVote(vote, user_id, until_comment_id)
+  @vote = vote
+  @id = user_id
+  until_comment_id.times do |index|
+    CommentVote.create(
+      vote: @vote,
+      comment_id: index+1,
+      user_id: @id
+    )
+  end
 end
 
-50.times do
-  CaptionVote.create(
-    vote: rand(-1..1),
-    caption_id: rand(1..18),
-    user_id: rand(1..5)
-  )
+createCommentVote(1, 1, 10)
+createCommentVote(-1, 2, 35)
+createCommentVote(1, 3, 30)
+createCommentVote(1, 4, 5)
+createCommentVote(1, 5, 3)
+
+def createCaptionVote(vote, user_id, until_caption_id)
+  @vote = vote
+  @id = user_id
+  until_caption_id.times do |index|
+    CaptionVote.create(
+      vote: @vote,
+      caption_id: index+1,
+      user_id: @id
+    )
+  end
 end
+
+createCaptionVote(1, 1, 10)
+createCaptionVote(-1, 2, 15)
+createCaptionVote(1, 3, 15)
+createCaptionVote(1, 4, 5)
+createCaptionVote(1, 5, 3)
+
 
 Caption.all.each do |caption|
   CaptionVote.all.each do |vote|
