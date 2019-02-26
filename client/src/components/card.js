@@ -48,6 +48,10 @@ class Card extends Component {
       }
 
     toggleVote(arrowClicked){
+        if (!this.props.currentUser){
+            return
+        }
+
         if (arrowClicked === 'down'){
             if (this.state.downvoted){
                 this.setState({
