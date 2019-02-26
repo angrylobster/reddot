@@ -4,9 +4,13 @@ class CaptionsController < ApplicationController
   # GET /captions
   # GET /captions.json
   def index
-    @captions = Caption.all.left_outer_joins(:user).distinct.select('captions.*', 'users.name')
-    @captions = @captions.map do |caption|
-      caption.JSON
+    @captions = Caption.all.left_outer_joins(:user).distinct.select('captions.*', 'users.name').map do |caption|
+      caption.modify
+    end
+    @captions.each do |caption|
+      caption[:comments].each do |comment|
+        comment[:name] = User.find(comment[:poster_id]).name
+      end
     end
     render json: @captions
   end

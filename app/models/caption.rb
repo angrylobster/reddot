@@ -3,7 +3,7 @@ class Caption < ApplicationRecord
   has_many :comments
   has_many :caption_votes
 
-  def JSON
+  def modify
     result = {
       :id => self.id,
       :name => self.name,

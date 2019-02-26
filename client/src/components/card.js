@@ -31,7 +31,6 @@ class Card extends Component {
 
     postVote(vote) {
         if (!(this.props.current_user == null)) {
-            console.log(this.props.current_user);
             axios.post('/caption_votes.json', {
                 vote: vote,
                 user_id: this.props.current_user.id,
@@ -147,8 +146,8 @@ class Card extends Component {
             return (
                 <Card
                     content={ comment.comment_text }
-                    poster={ comment.user_id }
-                    total_votes={ comment.total_votes }
+                    poster={ comment.name }
+                    total_votes={ comment.comment_votes }
                     id={ comment.id }
                     user_id={ comment.user_id }
                     comments={ null }
@@ -192,7 +191,6 @@ class Card extends Component {
                             </small>
                         </div>
                         { this.state.comments ? this.getComments() : null }
-
                     </div>
                 </div>
             </div>

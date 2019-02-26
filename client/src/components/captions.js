@@ -19,6 +19,7 @@ class Captions extends Component {
       axios.get('/captions')
       .then(json => {
           //Set caption state to have latest captions
+          console.log(json)
           this.setState({
               //Save in state, all captions sorted by total_votes
               captions: json.data.sort((a, b) => {
