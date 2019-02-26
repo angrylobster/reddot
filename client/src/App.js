@@ -72,6 +72,7 @@ class App extends Component {
     }
 
     render() {
+        console.log(this.state.currentUser)
         return (
             <React.Fragment>
                 <Navbar
