@@ -6,12 +6,14 @@ class Card extends Component {
         super();
         this.postVote = this.postVote.bind(this);
         this.toggleVote = this.toggleVote.bind(this);
-        this.viewComments = this.viewComments.bind(this);
+        this.toggleComments = this.toggleComments.bind(this);
         this.getComments = this.getComments.bind(this);
         this.state={
             upvoted: false,
             downvoted: false,
-            total_votes: 0
+            total_votes: 0,
+            comments: [],
+            displayComments: false
         }
     }
 
@@ -134,43 +136,50 @@ class Card extends Component {
         if (this.props.renderViewComments === true){
             return (
                 <small
-                    onClick={ this.viewComments }
+                    onClick={ this.toggleComments }
                 >
-                    view comments
+                    {this.state.displayComments === true ? 'hide comments' : 'view comments' }
                 </small>
             )
         }
     }
 
-    viewComments(){
-        console.log(this.props.comments[0])
-        if (this.props.comments.length !== 0){
+    toggleComments(){
+        console.log(this.state.displayComments)
+        if (this.state.displayComments === true){
             this.setState({
-                comments: this.props.comments
+                displayComments: false
             })
-        }else {
-            console.log(this.props.comments.length)
+        } else {
+            this.setState({
+                displayComments: true
+            })
         }
     }
 
     getComments(){
-        return this.props.comments.map((comment, index) => {
-            return (
-                <Card
-                    content={ comment.comment_text }
-                    poster={ comment.name }
-                    total_votes={ comment.comment_votes }
-                    id={ comment.id }
-                    user_id={ comment.user_id }
-                    comments={ null }
-                    votes={ null }
-                    date={ comment.updated_at }
-                    current_user={ this.state.user }
-                    key={ index + comment }
-                    id={ index + comment.id }
-                />
-            )
-        })
+        if (this.props.comments){
+            return this.props.comments.map((comment, index) => {
+                return (
+                    <Card
+                        content={ comment.comment_text }
+                        poster={ comment.name }
+                        total_votes={ comment.comment_votes }
+                        id={ comment.id }
+                        user_id={ comment.user_id }
+                        comments={ null }
+                        votes={ null }
+                        date={ comment.updated_at }
+                        current_user={ this.state.user }
+                        key={ index + comment }
+                        id={ index + comment.id }
+                    />
+                )
+            })
+        }
+        return (
+            null
+        )
     }
 
     render() {
@@ -198,7 +207,7 @@ class Card extends Component {
                         <div className="d-flex">
                             { this.renderViewComments() }
                         </div>
-                        { this.state.comments ? this.getComments() : null }
+                        { this.state.displayComments === true ? this.getComments() : null }
                     </div>
                 </div>
             </div>
