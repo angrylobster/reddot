@@ -6,7 +6,7 @@ ruby '2.5.1'
 gem 'faker'
 gem 'devise'
 gem 'cloudinary'
-
+gem 'nokogiri'
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 gem 'rails', '~> 5.2.2'
 # Use postgresql as the database for Active Record

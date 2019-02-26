@@ -11,17 +11,15 @@ class Navbar extends Component{
     }
 
     postImg() {
-        console.log("WTF")
         Axios({
             method: 'POST',
             url: '/post',
             data: {
-                img: "https://www.asiaone.com/sites/default/files/original_images/Apr2016/0401_gohyongwei2.jpg",
-                caption: "WOW quotes"
+                img: this.props.currentImg
             }
         })
         .then(response => {
-            console.log(response);
+            this.props.setCurrentImg(response.data)
         })
         .catch(error => {
             console.log(error)

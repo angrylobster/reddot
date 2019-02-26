@@ -11,12 +11,18 @@ class App extends Component {
     constructor(){
         super();
         this.login = this.login.bind(this);
-        this.logout = this.logout.bind(this);
+        this.logout = this.logout.bind(this);29767 16158
         this.setCurrentUser = this.setCurrentUser.bind(this);
+        this.setCurrentImg = this.setCurrentImg.bind(this);
         this.state = {
             error: null,
-            currentUser: null
+            currentUser: null,
+            currentImg: "https://www.asiaone.com/sites/default/files/original_images/Apr2016/0401_gohyongwei2.jpg" //default img
         }
+    }
+
+    setCurrentImg(img) {
+        this.setState({ currentImg: img })
     }
 
     setCurrentUser(user){
@@ -77,7 +83,10 @@ class App extends Component {
             <React.Fragment>
                 <Navbar
                     currentUser={ this.state.currentUser }  
-                    logout={ this.logout }                  
+                    logout={ this.logout }        
+                    currentImg={ this.state.currentImg }
+                    winningCaption={ this.state.winningCaption }
+                    setCurrentImg={ this.setCurrentImg }          
                 />
                 <Modal
                     setCurrentUser={ this.setCurrentUser }
