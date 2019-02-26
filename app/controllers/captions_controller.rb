@@ -11,7 +11,7 @@ class CaptionsController < ApplicationController
     render json: @captions
   end
 
-  def activity
+  def activity #All types of activities. For recent activity.
     @activities = Array.new
 
     Caption.select('captions.*', 'users.name').joins(:user).find_each(start: Caption.all.count-10, finish: Caption.all.count) do |caption|
@@ -66,8 +66,12 @@ class CaptionsController < ApplicationController
   # PATCH/PUT /captions/1
   # PATCH/PUT /captions/1.json
   def update
+    jsonString = request.body.read
+    jsonHash = JSON.parse(jsonString)
+    @caption = Caption.where(id: request.params["id"])
+    
     respond_to do |format|
-      if @caption.update(caption_params)
+      if @caption.update(jsonHash)
         format.html { redirect_to @caption, notice: 'Caption was successfully updated.' }
         format.json { render :show, status: :ok, location: @caption }
       else

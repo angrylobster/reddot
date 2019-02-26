@@ -10,25 +10,36 @@ class Captions extends Component {
       this.retrieveCaptionsData = this.retrieveCaptionsData.bind(this);
 
       this.state = {
-          captions: []
+          captions: [],
+          user: ""
       }
   }
 
   retrieveCaptionsData() {
       axios.get('/captions')
-      .then(captions => {
-        console.log(captions);
+      .then(json => {
+          //Set caption state to have latest captions
           this.setState({
-              captions: captions.data.sort((a, b) => {
-                  if (a.updated_at > b.updated_at){
+              //Save in state, all captions sorted by total_votes
+              captions: json.data.captions.sort((a, b) => {
+                  if (a.total_votes > b.total_votes){
                       return -1;
-                  } else if (a.updated_at < b.updated_at){
+                  } else if (a.total_votes < b.total_votes){
                       return 1;
                   } else {
                       return 0;
                   }
               })
           });
+
+          //Set user state to current user
+          this.setState({
+            //Save in state, all captions sorted by total_votes
+            user: json.data.user
+        });
+
+          console.log(this.state.captions);
+          console.log(this.state.user);
       })
       .catch(error => {
           return error;
@@ -40,9 +51,19 @@ class Captions extends Component {
   }
 
   getCaptionCards(){
-      return this.state.captions.slice(0,5).map((caption, index) => {
+      return this.state.captions.slice(0,4).map((caption, index) => {
           return (
-            <h1>hi</h1>
+            <Card
+              caption={ caption.caption }
+              username={ caption.name }
+              total_votes={ caption.total_votes }
+              caption_id={ caption.id }
+              user_id={ caption.user_id }
+              comments={ caption.comments }
+              votes={ caption.caption_votes }
+              date={ caption.updated_at }
+              current_user={ this.state.user }
+             />
           )
       })
   }
@@ -50,10 +71,7 @@ class Captions extends Component {
     render() {
         return (
             <div>
-                <Card/>
-                <Card/>
-                <Card/>
-                <Card/>
+                { this.getCaptionCards() }
                 <NewCaption/>
             </div>
         );
@@ -64,7 +82,7 @@ class NewCaption extends Component{
 
     postCaption(input) {
       axios.post('/captions.json', {
-          body: input,
+          caption: input,
           user_id: 0 //placeholder
       })
           .then(function(response) {
