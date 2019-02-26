@@ -19,9 +19,10 @@ class Captions extends Component {
       axios.get('/captions')
       .then(json => {
           //Set caption state to have latest captions
+          console.log(json)
           this.setState({
               //Save in state, all captions sorted by total_votes
-              captions: json.data.captions.sort((a, b) => {
+              captions: json.data.sort((a, b) => {
                   if (a.total_votes > b.total_votes){
                       return -1;
                   } else if (a.total_votes < b.total_votes){
@@ -37,9 +38,6 @@ class Captions extends Component {
             //Save in state, all captions sorted by total_votes
             user: json.data.user
         });
-
-          console.log(this.state.captions);
-          console.log(this.state.user);
       })
       .catch(error => {
           return error;
@@ -51,18 +49,21 @@ class Captions extends Component {
   }
 
   getCaptionCards(){
-      return this.state.captions.slice(0,4).map((caption, index) => {
+      return this.state.captions.map((caption, index) => {
           return (
             <Card
-              caption={ caption.caption }
-              username={ caption.name }
+              content={ caption.caption_text }
+              poster={ caption.name }
               total_votes={ caption.total_votes }
-              caption_id={ caption.id }
+              id={ caption.id }
               user_id={ caption.user_id }
               comments={ caption.comments }
               votes={ caption.caption_votes }
               date={ caption.updated_at }
               current_user={ this.state.user }
+              key={ index + caption }
+              id={ index + caption.id }
+              renderViewComments={ true }
              />
           )
       })
@@ -70,10 +71,14 @@ class Captions extends Component {
 
     render() {
         return (
-            <div>
-                { this.getCaptionCards() }
+            <React.Fragment>
+                <div
+                    style={{overflowY: "scroll", height: '280px'}}
+                >
+                    { this.getCaptionCards() }
+                </div>
                 <NewCaption/>
-            </div>
+            </React.Fragment>
         );
     }
 }

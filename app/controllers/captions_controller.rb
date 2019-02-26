@@ -3,10 +3,16 @@ class CaptionsController < ApplicationController
 
   # GET /captions
   # GET /captions.json
-  def index #All captions and their relevant data. For caption cards.
-    @current_user = current_user
-    @captions = Caption.select('captions.*', 'users.name', 'users.email', 'comments', 'caption_votes').joins(:user, :comments, :caption_votes)
-    render json: {captions: @captions, user: @current_user}
+  def index
+    @captions = Caption.all.left_outer_joins(:user).distinct.select('captions.*', 'users.name').map do |caption|
+      caption.modify
+    end
+    @captions.each do |caption|
+      caption[:comments].each do |comment|
+        comment[:name] = User.find(comment[:poster_id]).name
+      end
+    end
+    render json: @captions
   end
 
   def activity #All types of activities. For recent activity.
