@@ -11,9 +11,35 @@ class App extends Component {
     constructor(){
         super();
         this.login = this.login.bind(this);
+        this.logout = this.logout.bind(this);
+        this.setCurrentUser = this.setCurrentUser.bind(this);
         this.state = {
-            error: ''
+            error: null,
+            currentUser: null
         }
+    }
+
+    setCurrentUser(user){
+        this.setState({
+            currentUser: user
+        })
+    }
+
+    logout(e){
+        e.preventDefault();
+        Axios({
+            method: 'DELETE',
+            url: '/users/sign_out',
+        })
+        .then(response => {
+            console.log(response)
+            this.setState({
+                currentUser: null
+            })
+        })
+        .catch(error => {
+            console.log(error)
+        })
     }
     
     login(e, email, password){
@@ -36,6 +62,7 @@ class App extends Component {
             modal.setAttribute('style', 'display: none');
             const modalBackdrops = document.getElementsByClassName('modal-backdrop');
             document.body.removeChild(modalBackdrops[0]);
+            this.setCurrentUser(response.data);
         })
         .catch(error => {
             this.setState({
@@ -45,15 +72,23 @@ class App extends Component {
     }
 
     render() {
+        console.log(this.state.currentUser)
         return (
             <React.Fragment>
-                <Navbar/>
+                <Navbar
+                    currentUser={ this.state.currentUser }  
+                    logout={ this.logout }                  
+                />
                 <Modal
+                    setCurrentUser={ this.setCurrentUser }
                     error={ this.state.error }
                     login={ this.login }
                 />
                 <div className="App">
-                    <Main/>
+                    <Main
+                        setCurrentUser={ this.setCurrentUser }
+                        currentUser={ this.state.currentUser }
+                    />
                     <Activity/>
                 </div>
             </React.Fragment>

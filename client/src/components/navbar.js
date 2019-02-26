@@ -28,6 +28,29 @@ class Navbar extends Component{
         });
     }
 
+    getLoginOrLogoutButton(){
+        if (!this.props.currentUser){
+            return( 
+                <button 
+                    className="btn btn-outline-light"
+                    data-toggle="modal" 
+                    data-target="#exampleModal"
+                >
+                    Login
+                </button>
+            )
+        } else {
+            return (
+                <button
+                    className="btn btn-outline-light"
+                    onClick={ e => { this.props.logout(e) }}                
+                >
+                    Logout
+                </button>
+            )
+        }
+    }
+    
     render(){
         return (
             <nav className="navbar navbar-dark navbar-expand-lg bg-dark fixed-top text-white">
@@ -48,11 +71,7 @@ class Navbar extends Component{
                         >
                             Login
                         </button>
-
-
-
-
-
+                    { this.getLoginOrLogoutButton() }
                 </div>
                 <button 
                     onClick={this.postImg}

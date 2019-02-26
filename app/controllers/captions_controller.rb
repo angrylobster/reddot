@@ -7,12 +7,7 @@ class CaptionsController < ApplicationController
     @captions = Caption.all.left_outer_joins(:user).distinct.select('captions.*', 'users.name').map do |caption|
       caption.modify
     end
-    @captions.each do |caption|
-      caption[:comments].each do |comment|
-        comment[:name] = User.find(comment[:poster_id]).name
-      end
-    end
-    render json: @captions
+    render json: {captions: @captions, user: current_user}
   end
 
   def activity #All types of activities. For recent activity.
