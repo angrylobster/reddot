@@ -47,16 +47,17 @@ class Captions extends Component {
           return (
             <Card
               currentUser={ this.props.currentUser }
-              content={ caption.caption_text }
-              poster={ caption.name }
-              total_votes={ caption.total_votes }
-              id={ caption.id }
-              user_id={ caption.user_id }
-              comments={ caption.comments }
-              votes={ caption.caption_votes }
-              date={ caption.updated_at }
-              key={ index + caption }
+            //   content={ caption.caption_text }
+            //   poster={ caption.name }
+            //   total_votes={ caption.total_votes }
+            //   id={ caption.id }
+            //   user_id={ caption.user_id }
+            //   comments={ caption.comments }
+            //   votes={ caption.caption_votes }
+            //   date={ caption.updated_at }
+            //   key={ index + caption }
               renderViewComments={ true }
+              caption={ caption }
              />
           )
         })
