@@ -23,6 +23,11 @@ class Card extends Component {
                 currentUser: this.props.currentUser,
                 voted: this.valueVoted()
             })
+        } else if (this.state.currentUser && !this.props.currentUser){
+            this.setState({
+                currentUser: null,
+                voted: 0
+            })
         }
     }
 

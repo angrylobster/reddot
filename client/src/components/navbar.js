@@ -12,9 +12,9 @@ class Navbar extends Component{
         if (!this.props.currentUser){
             return( 
                 <button 
-                    className="btn btn-outline-light"
+                    className="btn btn-outline-light float-right"
                     data-toggle="modal" 
-                    data-target="#exampleModal"
+                    data-target="#login-modal"
                 >
                     Login
                 </button>
@@ -30,21 +30,36 @@ class Navbar extends Component{
             )
         }
     }
+
+    getRegisterButton(){
+        if (!this.props.currentUser){
+            return (
+                <button
+                    className="btn btn-outline-light float-right ml-3"
+                    data-toggle="modal" 
+                    data-target="#registration-modal"
+                >
+                    Register
+                </button>
+            )
+        }
+    }
     
     render(){
         return (
-            <nav className="navbar navbar-dark navbar-expand-lg bg-dark fixed-top text-white">
+            <nav className="navbar navbar-dark navbar-expand-sm bg-dark fixed-top text-white justify-content-end">
                 <a className="navbar-brand" href="/">
                     <h3 className="m-0">
                         Reddot
                     </h3>
                 </a>
-                <button className="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo02"
+                <button className="navbar-toggler ml-auto" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo02"
                     aria-controls="navbarTogglerDemo02" aria-expanded="false" aria-label="Toggle navigation">
                     <span className="navbar-toggler-icon"></span>
                 </button>
-                <div className="collapse navbar-collapse" id="navbarTogglerDemo02">
+                <div className="collapse navbar-collapse flex-grow-0 ml-auto" id="navbarTogglerDemo02">
                     { this.getLoginOrLogoutButton() }
+                    { this.getRegisterButton() }
                 </div>
             </nav>
         )

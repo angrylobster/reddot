@@ -2,9 +2,10 @@ import React, { Component } from 'react';
 import Main from './components/main';
 import Activity from './components/activity';
 import Navbar from './components/navbar';
-import Modal from './components/modal';
+import LoginModal from './components/loginModal';
 import Axios from 'axios';
 import './App.css';
+import RegistrationModal from './components/registrationModal';
 
 class App extends Component {
     
@@ -23,18 +24,19 @@ class App extends Component {
     }
 
     componentDidMount(){
-        this.getLatestPost()
-        setInterval(this.getLatestPost, 3000)
+        this.getLatestPost();
+        this.getCurrentUser();
+        // setInterval(this.getLatestPost, 3000)
     }
 
     getCurrentUser(){
         Axios({
             method: 'GET',
-            url: '/users/current_user',
+            url: '/users/get_current_user',
         })
         .then(response =>{
             console.log('response', response)
-            // this.setState({ currentUser: response })
+            this.setState({ currentUser: response })
         })
         .catch(error => {
             console.log(error)
@@ -83,6 +85,8 @@ class App extends Component {
     
     login(e, email, password){
         e.preventDefault();
+        console.log(email)
+        console.log(password);
         Axios({
             method: 'POST',
             url: '/users/sign_in',
@@ -94,20 +98,26 @@ class App extends Component {
             }
         })
         .then(response => {
-            console.log(response);
-            const modal = document.querySelector('#exampleModal');
+            const modal = document.getElementById(e.target.id);
             modal.classList.remove('show');
             modal.setAttribute('aria-hidden', 'true');
             modal.setAttribute('style', 'display: none');
             const modalBackdrops = document.getElementsByClassName('modal-backdrop');
-            document.body.removeChild(modalBackdrops[0]);
-            this.setCurrentUser(response.data);
+            modalBackdrops.forEach(backdrop => {
+                document.body.removeChild(backdrop);
+            })
+            // this.setCurrentUser(response.data);
         })
         .catch(error => {
+            console.log('Error', error)
             this.setState({
                 loginError: 'Invalid username or password!'
             })
         });
+    }
+
+    register(e, email, password){
+
     }
 
     render() {
@@ -120,9 +130,11 @@ class App extends Component {
                     winningCaption={ this.state.winningCaption }
                     setCurrentPost={ this.setCurrentPost }          
                 />
-                <Modal
+                <LoginModal
                     loginError={ this.state.loginError }
                     login={ this.login }
+                />
+                <RegistrationModal
                 />
                 <div className="App">
                     <Main

@@ -58,11 +58,11 @@ class Login extends Component {
             >
                 <div className="form-group">
                     { this.props.loginError ? this.getLoginErrorDiv() : null }
-                    <label htmlFor="exampleInputEmail1">Email address</label>
+                    <label htmlFor="login-email">Email address</label>
                     <input 
                         type="email" 
                         className="form-control" 
-                        id="exampleInputEmail1" 
+                        id="login-email" 
                         name="email" 
                         aria-describedby="emailHelp" 
                         placeholder="Enter email"
@@ -71,11 +71,11 @@ class Login extends Component {
                     />
                 </div>
                 <div className="form-group">
-                    <label htmlFor="exampleInputPassword1">Password</label>
+                    <label htmlFor="login-password">Password</label>
                     <input 
                         type="password" 
                         className="form-control" 
-                        id="exampleInputPassword1" 
+                        id="login-password" 
                         name="password" 
                         placeholder="Password"
                         onChange={this.passwordChangeHandler}

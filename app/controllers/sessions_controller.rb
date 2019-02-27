@@ -4,15 +4,16 @@ class SessionsController < Devise::SessionsController
     def create
         super
         session[:user_id] = current_user.id
+        p current_user
+        p session[:user_id]
     end
 
     def get_current_user
-        # byebug
         render json: current_user
     end
 
     private
-    def respond_with(resource, _opts = {})
+    def respond_with(resource, opts = {})
         # p resource
         render json: resource
     end
