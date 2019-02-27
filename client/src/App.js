@@ -2,9 +2,10 @@ import React, { Component } from 'react';
 import Main from './components/main';
 import Activity from './components/activity';
 import Navbar from './components/navbar';
-import Modal from './components/modal';
+import LoginModal from './components/loginModal';
 import Axios from 'axios';
 import './App.css';
+import RegistrationModal from './components/registrationModal';
 
 class App extends Component {
     
@@ -23,18 +24,19 @@ class App extends Component {
     }
 
     componentDidMount(){
-        this.getLatestPost()
+        this.getLatestPost();
+        this.getCurrentUser();
         setInterval(this.getLatestPost, 3000)
     }
 
     getCurrentUser(){
         Axios({
             method: 'GET',
-            url: '/users/current_user',
+            url: '/users/get_current_user',
         })
         .then(response =>{
             console.log('response', response)
-            // this.setState({ currentUser: response })
+            this.setState({ currentUser: response })
         })
         .catch(error => {
             console.log(error)
@@ -94,18 +96,45 @@ class App extends Component {
             }
         })
         .then(response => {
-            console.log(response);
-            const modal = document.querySelector('#exampleModal');
+            const modal = document.getElementById('login-modal');
             modal.classList.remove('show');
             modal.setAttribute('aria-hidden', 'true');
             modal.setAttribute('style', 'display: none');
-            const modalBackdrops = document.getElementsByClassName('modal-backdrop');
-            document.body.removeChild(modalBackdrops[0]);
+            document.getElementsByClassName('modal-backdrop')[0].remove();
             this.setCurrentUser(response.data);
         })
         .catch(error => {
+            console.log('Error', error)
             this.setState({
                 loginError: 'Invalid username or password!'
+            })
+        });
+    }
+
+    register(e, email, password){
+        e.preventDefault();
+        Axios({
+            method: 'POST',
+            url: '/users/sign_up',
+            data: {
+                user: {
+                    email: email,
+                    password: password
+                }
+            }
+        })
+        .then(response => {
+            const modal = document.getElementById('registration-modal');
+            modal.classList.remove('show');
+            modal.setAttribute('aria-hidden', 'true');
+            modal.setAttribute('style', 'display: none');
+            document.getElementsByClassName('modal-backdrop')[0].remove();
+            this.setCurrentUser(response.data);
+        })
+        .catch(error => {
+            console.log('Error', error)
+            this.setState({
+                loginError: 'Something went wrong!'
             })
         });
     }
@@ -120,9 +149,11 @@ class App extends Component {
                     winningCaption={ this.state.winningCaption }
                     setCurrentPost={ this.setCurrentPost }          
                 />
-                <Modal
+                <LoginModal
                     loginError={ this.state.loginError }
                     login={ this.login }
+                />
+                <RegistrationModal
                 />
                 <div className="App">
                     <Main
