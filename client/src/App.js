@@ -26,7 +26,7 @@ class App extends Component {
     componentDidMount(){
         this.getLatestPost();
         this.getCurrentUser();
-        // setInterval(this.getLatestPost, 3000)
+        setInterval(this.getLatestPost, 3000)
     }
 
     getCurrentUser(){
@@ -85,8 +85,6 @@ class App extends Component {
     
     login(e, email, password){
         e.preventDefault();
-        console.log(email)
-        console.log(password);
         Axios({
             method: 'POST',
             url: '/users/sign_in',
@@ -98,15 +96,12 @@ class App extends Component {
             }
         })
         .then(response => {
-            const modal = document.getElementById(e.target.id);
+            const modal = document.getElementById('login-modal');
             modal.classList.remove('show');
             modal.setAttribute('aria-hidden', 'true');
             modal.setAttribute('style', 'display: none');
-            const modalBackdrops = document.getElementsByClassName('modal-backdrop');
-            modalBackdrops.forEach(backdrop => {
-                document.body.removeChild(backdrop);
-            })
-            // this.setCurrentUser(response.data);
+            document.getElementsByClassName('modal-backdrop')[0].remove();
+            this.setCurrentUser(response.data);
         })
         .catch(error => {
             console.log('Error', error)
@@ -117,7 +112,31 @@ class App extends Component {
     }
 
     register(e, email, password){
-
+        e.preventDefault();
+        Axios({
+            method: 'POST',
+            url: '/users/sign_up',
+            data: {
+                user: {
+                    email: email,
+                    password: password
+                }
+            }
+        })
+        .then(response => {
+            const modal = document.getElementById('registration-modal');
+            modal.classList.remove('show');
+            modal.setAttribute('aria-hidden', 'true');
+            modal.setAttribute('style', 'display: none');
+            document.getElementsByClassName('modal-backdrop')[0].remove();
+            this.setCurrentUser(response.data);
+        })
+        .catch(error => {
+            console.log('Error', error)
+            this.setState({
+                loginError: 'Something went wrong!'
+            })
+        });
     }
 
     render() {

@@ -32,7 +32,7 @@ class Captions extends Component {
   }
 
   componentDidUpdate(){
-    if (this.props.currentUser){
+    if (this.props.currentUser && !this.state.currentUser){
         console.log('setting current user')
         this.setState({
             currentUser: this.props.currentUser
