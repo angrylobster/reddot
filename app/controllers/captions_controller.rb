@@ -7,8 +7,7 @@ class CaptionsController < ApplicationController
     @captions = Post.last.captions.all.left_outer_joins(:user).distinct.select('captions.*', 'users.name').map do |caption|
       caption.modify
     end
-    # @captions = Post.last.captions.order(total_votes: :desc)
-    render json: {captions: @captions, user: current_user}
+    render json: @captions
   end
 
   def activity #All types of activities. For recent activity.

@@ -35,18 +35,6 @@ class Card extends Component {
         this.setState({ 
             total_votes: this.props.total_votes,
         })
-        // console.log(this.props.currentUser)
-
-        //Update Caption total_votes
-        // axios.put(`/captions/${this.props.id}.json`, {
-        //     total_votes: 0
-        // })
-        //     .then(function(response) {
-        //     console.log(response);
-        // })
-        //     .catch(function(error) {
-        //     console.log(error);
-        // });
     } 
 
     valueVoted(){
@@ -215,6 +203,7 @@ class Card extends Component {
     }
 
     render() {
+        console.log(this.props)
         return (
             <div className="d-flex p-2">
                 <div
