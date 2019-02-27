@@ -7,6 +7,7 @@ class Caption < ApplicationRecord
   def modify
     result = {
       :id => self.id,
+      :post_id => self.post_id,
       :name => self.name,
       :caption_text => self.caption,
       :caption_votes => self.caption_votes,

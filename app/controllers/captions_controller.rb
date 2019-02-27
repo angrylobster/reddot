@@ -4,9 +4,10 @@ class CaptionsController < ApplicationController
   # GET /captions
   # GET /captions.json
   def index
-    @captions = Caption.all.left_outer_joins(:user).distinct.select('captions.*', 'users.name').map do |caption|
+    @captions = Post.last.captions.all.left_outer_joins(:user).distinct.select('captions.*', 'users.name').map do |caption|
       caption.modify
     end
+    # @captions = Post.last.captions.order(total_votes: :desc)
     render json: {captions: @captions, user: current_user}
   end
 
