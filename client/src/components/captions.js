@@ -20,7 +20,14 @@ class Captions extends Component {
       axios.get('/captions')
       .then(json => {
         //Set caption state to have latest captions
-        if (this.state.currentCaptions[0].id == 0) {
+        console.log(this.props.currentUser.id, json.data.user.id)
+
+        if (this.props.currentUser.id !== json.data.user.id) {
+            console.log(this.props.currentUser.id, json.data.user.id)
+            this.setState({ currentUser: this.props.currentUser })
+        }
+
+        if (this.state.currentCaptions[0].id === 0) {
             this.setState({ currentCaptions: json.data.captions });
         } else if (this.props.currentPost.id !== this.state.currentCaptions[0].post_id) {
             this.setState({ currentCaptions: json.data.captions });
@@ -31,17 +38,11 @@ class Captions extends Component {
       })
   }
 
-  componentDidUpdate(){
-    if (this.props.currentUser){
-        console.log('setting current user')
-        this.setState({
-            currentUser: this.props.currentUser
-        })
-    }
+  componentDidUpdate() {
+    this.retrieveCaptionsData()
   }
 
   getCaptionCards(){
-      this.retrieveCaptionsData();
       return this.state.currentCaptions.map((caption, index) => {
           return (
             <Card
