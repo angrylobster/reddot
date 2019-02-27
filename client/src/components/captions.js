@@ -8,9 +8,10 @@ class Captions extends Component {
   constructor(){
       super();
       this.retrieveCaptionsData = this.retrieveCaptionsData.bind(this);
+      this.getCaptionCards = this.getCaptionCards.bind(this);
 
       this.state = {
-          captions: [],
+          currentCaptions: [{id: 0}],
           currentUser: null
       }
   }
@@ -18,37 +19,30 @@ class Captions extends Component {
   retrieveCaptionsData() {
       axios.get('/captions')
       .then(json => {
-          //Set caption state to have latest captions
-          this.setState({
-              //Save in state, all captions sorted by total_votes
-              captions: json.data.captions.sort((a, b) => {
-                  if (a.total_votes > b.total_votes){
-                      return -1;
-                  } else if (a.total_votes < b.total_votes){
-                      return 1;
-                  } else {
-                      return 0;
-                  }
-              }),
-          });
+        //Set caption state to have latest captions
+        if (this.state.currentCaptions[0].id == 0) {
+            this.setState({ currentCaptions: json.data.captions });
+        } else if (this.props.currentPost.id !== this.state.currentCaptions[0].post_id) {
+            this.setState({ currentCaptions: json.data.captions });
+        }
       })
       .catch(error => {
           return error;
       })
   }
 
-  componentDidMount(){
-        this.retrieveCaptionsData();
-        if (this.props.currentUser){
-            console.log('setting current user')
-            this.setState({
-                currentUser: this.props.currentUser
-            })
-        }
+  componentDidUpdate(){
+    if (this.props.currentUser){
+        console.log('setting current user')
+        this.setState({
+            currentUser: this.props.currentUser
+        })
+    }
   }
 
   getCaptionCards(){
-      return this.state.captions.map((caption, index) => {
+      this.retrieveCaptionsData();
+      return this.state.currentCaptions.map((caption, index) => {
           return (
             <Card
               currentUser={ this.props.currentUser }
