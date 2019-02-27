@@ -203,7 +203,6 @@ class Card extends Component {
     }
 
     render() {
-        console.log(this.props)
         return (
             <div className="d-flex p-2">
                 <div
