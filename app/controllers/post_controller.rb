@@ -8,6 +8,10 @@ class PostController < ApplicationController
   end
 
   def create
+    ##Take Current Img And Winning Caption and post to Twitter/Instagram
+    
+
+    ##Generate new image for next post
     # Fetch and parse HTML document
     doc = Nokogiri::HTML(open('http://film-grab.com/?random'))
     img = doc.css('img').attr('src').text
