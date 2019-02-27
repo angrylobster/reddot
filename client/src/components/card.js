@@ -27,7 +27,6 @@ class Card extends Component {
     }
 
     componentDidMount(){
-        // console.log('card props', this.props)
         this.setState({ 
             total_votes: this.props.total_votes,
         })
@@ -60,17 +59,17 @@ class Card extends Component {
     }
 
     postVote(vote) {
-        if (!(this.props.current_user == null)) {
-            axios.post('/caption_votes.json', {
+        if (this.state.currentUser) {
+            axios.post('/caption_votes', {
                 vote: vote,
-                user_id: this.props.current_user.id,
+                user_id: this.props.currentUser.id,
                 caption_id: this.props.id
             })
                 .then(function(response) {
-                console.log(response);
+                console.log('response', response);
             })
                 .catch(function(error) {
-                console.log(error);
+                console.log('error', error);
             });
         }
     }
@@ -200,7 +199,6 @@ class Card extends Component {
                         date={ comment.updated_at }
                         current_user={ this.state.currentUser }
                         key={ index + comment }
-                        id={ index + comment.name }
                     />
                 )
             })
@@ -211,7 +209,6 @@ class Card extends Component {
     }
 
     render() {
-        console.log('current user', this.state.currentUser)
         return (
             <div className="d-flex p-2">
                 <div

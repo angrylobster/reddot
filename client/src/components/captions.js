@@ -61,7 +61,6 @@ class Captions extends Component {
               votes={ caption.caption_votes }
               date={ caption.updated_at }
               key={ index + caption }
-              id={ index + caption.name }
               renderViewComments={ true }
              />
           )
