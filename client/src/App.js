@@ -14,6 +14,7 @@ class App extends Component {
         this.logout = this.logout.bind(this);
         this.setCurrentUser = this.setCurrentUser.bind(this);
         this.setCurrentImg = this.setCurrentImg.bind(this);
+        this.getLatestPost = this.getLatestPost.bind(this);
         this.state = {
             error: null,
             currentUser: null,
@@ -22,6 +23,10 @@ class App extends Component {
     }
 
     componentDidMount(){
+        setInterval(this.getLatestPost, 3000)
+    }
+
+    getLatestPost() {
         Axios({
             method: 'GET',
             url: '/post',
