@@ -47,7 +47,7 @@ class App extends Component {
             url: '/post/latest',
         })
         .then(response => {
-            this.setState({ currentImg: response.data.currentImg })
+            this.setState({ currentPost: response.data })
         })
         .catch(error => {
             console.log(error)
