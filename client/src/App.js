@@ -33,9 +33,7 @@ class App extends Component {
             url: '/post/latest',
         })
         .then(response => {
-            this.setState({currentPost: response.data.post})
-
-             console.log("New STATE:", this.state.currentPost)
+            this.setState({currentPost: response.data})
         })
         .catch(error => {
             console.log(error)

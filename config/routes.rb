@@ -3,7 +3,6 @@ Rails.application.routes.draw do
 
   get '/post', to: 'post#index'
   get '/post/latest', to: 'post#latest'
-  post '/post', to: 'post#create'
 
   resources :caption_votes
   resources :comment_votes
