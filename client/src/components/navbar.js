@@ -1,29 +1,11 @@
 import React, { Component } from 'react';
-import Axios from 'axios';
 
 class Navbar extends Component{
 
     constructor(){
         super();
-        this.postImg = this.postImg.bind(this);
         this.state = {
         }
-    }
-
-    postImg() {
-        Axios({
-            method: 'POST',
-            url: '/post',
-            data: {
-                img: this.props.currentImg
-            }
-        })
-        .then(response => {
-            this.props.setCurrentPost(response.data.currentPost)
-        })
-        .catch(error => {
-            console.log(error)
-        });
     }
 
     getLoginOrLogoutButton(){
@@ -64,11 +46,6 @@ class Navbar extends Component{
                 <div className="collapse navbar-collapse" id="navbarTogglerDemo02">
                     { this.getLoginOrLogoutButton() }
                 </div>
-                <button 
-                    onClick={this.postImg}
-                >
-                    ADMIN POST IMAGE
-                </button>
             </nav>
         )
     }
