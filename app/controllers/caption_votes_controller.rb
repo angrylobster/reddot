@@ -8,6 +8,15 @@ class CaptionVotesController < ApplicationController
     render json: @caption_votes
   end
 
+  #POST /get_caption_vote
+  def retrieve
+    jsonString = request.body.read
+    jsonHash = JSON.parse(jsonString)
+    @caption_votes = CaptionVote.where(caption_id: jsonHash['caption_id'], user_id: jsonHash['user_id'])
+
+    render json: {caption_vote: @caption_vote, total_votes: total_votes(jsonHash['caption_id'])}
+  end
+
   # GET /caption_votes/1
   # GET /caption_votes/1.json
   def show
@@ -27,13 +36,13 @@ class CaptionVotesController < ApplicationController
   def create
     jsonString = request.body.read
     jsonHash = JSON.parse(jsonString)
-    
+
     #CHECK IF VOTE EXIST. IF EXIST, EDIT Vote Integer. IF NOT, CREATE Vote.
     if CaptionVote.where(user_id: jsonHash['user_id'], caption_id: jsonHash['caption_id']).any?
       #Vote Entry Exist. Update Vote
       @caption_vote = CaptionVote.where(user_id: jsonHash['user_id'], caption_id: jsonHash['caption_id'])
-      if @caption_vote.update(jsonHash)
-        render json: @caption_vote
+      if @caption_vote.update(vote: jsonHash["vote"])
+        render json: {caption_vote: @caption_vote, total_votes: total_votes(jsonHash['caption_id'])}
       else
         render json: @caption_vote.errors
       end
@@ -41,11 +50,23 @@ class CaptionVotesController < ApplicationController
       #Vote Entry Don't Exist. Create Vote
       @caption_vote = CaptionVote.new(jsonHash)
       if @caption_vote.save
-        render json: @caption_vote
-      else
+        render json: {caption_vote: @caption_vote, total_votes: total_votes(jsonHash['caption_id'])}
+        else
         render json: @caption_vote.errors
       end
     end
+  end
+
+  
+  def total_votes(caption_id)
+    total = 0
+    votes_on_caption = CaptionVote.where(caption_id: caption_id)
+    votes_on_caption.each do |vote|
+      total = total + vote.vote
+    end
+    @caption = Caption.where(id: caption_id)
+    @caption.update(total_votes: total)
+    return total
   end
 
   # PATCH/PUT /caption_votes/1

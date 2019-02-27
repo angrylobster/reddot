@@ -8,6 +8,8 @@ class Card extends Component {
         this.toggleVote = this.toggleVote.bind(this);
         this.toggleComments = this.toggleComments.bind(this);
         this.getComments = this.getComments.bind(this);
+        this.retrieveCaptionVotesData = this.retrieveCaptionVotesData.bind(this);
+
         this.state={
             voted: 0,
             total_votes: 0,
@@ -17,11 +19,27 @@ class Card extends Component {
         }
     }
 
+    retrieveCaptionVotesData() {
+        axios.post(`/get_caption_votes`, {
+            caption_id: this.props.caption.id,
+            user_id: this.props.caption.user_id
+        })
+        .then(response => {
+            console.log("Retrieved Caption Vote Data ",response);
+            this.setState({voted: response.data.caption_vote[0].vote})
+            this.setState({total_votes: response.data.total_votes})
+        })
+        .catch(error => {
+            console.log(error);
+        })
+    }
+
     componentDidUpdate(){
+        console.log("CURRENT TOTAL VOTES", this.state.total_votes, this.state.voted)
         if (this.props.currentUser && !this.state.currentUser){
             this.setState({
-                currentUser: this.props.currentUser,
-                voted: this.valueVoted()
+                currentUser: this.props.currentUser
+                // voted: this.valueVoted()
             })
         } else if (this.state.currentUser && !this.props.currentUser){
             this.setState({
@@ -32,35 +50,34 @@ class Card extends Component {
     }
 
     componentDidMount(){
-        this.setState({ 
-            total_votes: this.props.total_votes,
-        })
+        this.retrieveCaptionVotesData()
     } 
 
-    valueVoted(){
-        if (this.getVote()){
-            return this.getVote().vote;
-        }
-    }
+    // valueVoted(){
+    //     if (this.getVote()){
+    //         return this.getVote().vote;
+    //     }
+    // }
 
-    getVote(){
-        console.log(this.props)
-        // return this.props.votes.find(vote => {
-        //     if (vote.user_id === this.props.currentUser.id){
-        //         return vote
-        //     }
-        // })
-    }
+    // getVote(){
+    //     console.log(this.props)
+    //     // return this.props.votes.find(vote => {
+    //     //     if (vote.user_id === this.props.currentUser.id){
+    //     //         return vote
+    //     //     }
+    //     // })
+    // }
 
     postVote(vote) {
         if (this.state.currentUser) {
             axios.post('/caption_votes', {
                 vote: vote,
-                user_id: this.props.currentUser.id,
-                caption_id: this.props.id
+                user_id: this.props.currentUser.data.id,
+                caption_id: this.props.caption.id
             })
                 .then(function(response) {
                 console.log('response', response);
+                this.setState({total_votes: response.data.total_votes})
             })
                 .catch(function(error) {
                 console.log('error', error);
@@ -72,7 +89,6 @@ class Card extends Component {
         if (!this.props.currentUser){
             return
         }
-
         if (arrowClicked === 'down'){
             if (this.state.voted === -1){
                 this.setState({
@@ -179,8 +195,8 @@ class Card extends Component {
     }
 
     getComments(){
-        if (this.props.comments){
-            return this.props.comments.map((comment, index) => {
+        if (this.props.caption.comments){
+            return this.props.caption.comments.map((comment, index) => {
                 return (
                     <Card
                         content={ comment.comment_text }
@@ -203,7 +219,6 @@ class Card extends Component {
     }
 
     render() {
-        console.log(this.props)
         return (
             <div className="d-flex p-2">
                 <div
@@ -216,14 +231,14 @@ class Card extends Component {
                     className="w-100 pl-2"
                 >
                     <div className="d-flex">
-                        <small>{this.props.poster}</small>
+                        <small>{this.props.caption.name}</small>
                         <small>{this.state.total_votes > 1 ? `${this.state.total_votes} points`: `${this.state.total_votes} point`}</small>
-                        <small>{this.getTimeTranspired(this.props.date)}</small>
+                        <small>{this.getTimeTranspired(this.props.caption.updated_at)}</small>
                     </div>
                     <div
                     >
-                        <p>
-                            { this.props.content }
+                        <p> 
+                            { this.props.caption.caption_text }
                         </p>
                         <div className="d-flex">
                             { this.renderViewComments() }

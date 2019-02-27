@@ -8,6 +8,8 @@ Rails.application.routes.draw do
   get '/activity', to: 'captions#activity'
   get '/post', to: 'post#index'
   get '/post/latest', to: 'post#latest'
+
+  post '/get_caption_votes', to: 'caption_votes#retrieve'
   
   devise_scope :user do
     get '/users/get_current_user', to: 'sessions#get_current_user'
