@@ -4,12 +4,20 @@ class Register extends Component {
 
     constructor(){
         super();
-        // this.doLogin = this.doLogin.bind(this)
+        this.doRegister = this.doRegister.bind(this)
+        this.changeHandler = this.changeHandler.bind(this)
         this.state = {
             email: '',
             password: '',
-            confirmPassword: ''
+            confirmPassword: '',
+            registrationError: ''
         }
+    }
+
+    componentDidMount(){
+        this.setState({
+            registrationError: this.props.registrationError
+        })
     }
 
     changeHandler(e){
@@ -18,14 +26,42 @@ class Register extends Component {
         })
     }
 
+    getRegistrationErrorDiv(){
+        return (
+            <small
+                className="text-danger d-block"
+                id="registration-error"
+            >
+                { this.state.registrationError }
+            </small>
+        )
+    }
+
+    doRegister(e){
+        e.preventDefault();
+        if (this.state.password === this.state.confirmPassword){
+            this.props.register(e, this.state.email, this.state.password);
+        } else {
+            this.setState({
+                registrationError: 'Passwords do not match!'
+            })
+        }
+    }
+
+    displayError(){
+        if (this.state.registrationError){
+            return this.getRegistrationErrorDiv();
+        }
+    }
+
     render() {
         return (
             <form
-                // onSubmit={ e => { this.doLogin(e) }} 
+                onSubmit={ e => { this.doRegister(e) }} 
                 id="registration-form"
             >
                 <div className="form-group">
-                    {/* { this.props.loginError ? this.getLoginErrorDiv() : null } */}
+                    { this.displayError() }
                     <label htmlFor="registration-email">Email address</label>
                     <input 
                         type="email" 
@@ -34,7 +70,7 @@ class Register extends Component {
                         name="email" 
                         aria-describedby="emailHelp" 
                         placeholder="Enter email"
-                        onChange={this.emailChangeHandler}
+                        onChange={this.changeHandler}
                         autoComplete="on"
                     />
                 </div>
@@ -46,7 +82,7 @@ class Register extends Component {
                         id="registration-password" 
                         name="password" 
                         placeholder="Password"
-                        onChange={this.passwordChangeHandler}
+                        onChange={this.changeHandler}
                         autoComplete="on"
                     />
                 </div>                
@@ -58,7 +94,7 @@ class Register extends Component {
                         id="confirm-password" 
                         name="confirmPassword" 
                         placeholder="Confirm Password"
-                        onChange={this.passwordChangeHandler}
+                        onChange={this.changeHandler}
                         autoComplete="off"
                     />
                 </div>

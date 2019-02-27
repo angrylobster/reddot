@@ -20,7 +20,6 @@ class Captions extends Component {
       axios.get('/captions')
       .then(json => {
         //Set caption state to have latest captions
-        console.log('CAPTIONS', json)
         if (this.state.currentCaptions[0].id === 0) {
             this.setState({ currentCaptions: json.data });
         } else if (this.props.currentPost.id !== this.state.currentCaptions[0].post_id) {
@@ -64,7 +63,6 @@ class Captions extends Component {
     }
     
     render() {
-        console.log('current captions', this.state.currentCaptions)
         return (
             <React.Fragment>
                 <div

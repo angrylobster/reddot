@@ -16,8 +16,10 @@ class App extends Component {
         this.setCurrentUser = this.setCurrentUser.bind(this);
         this.setCurrentPost = this.setCurrentPost.bind(this);
         this.getLatestPost = this.getLatestPost.bind(this);
+        this.register = this.register.bind(this);
         this.state = {
             loginError: null,
+            registrationError: '',
             currentUser: null,
             currentPost: {img: "https://upload.wikimedia.org/wikipedia/commons/d/d2/Solid_white.png"} //Default White Image
         }
@@ -36,7 +38,7 @@ class App extends Component {
         })
         .then(response =>{
             console.log('response', response)
-            this.setState({ currentUser: response })
+            this.setState({ currentUser: response.data })
         })
         .catch(error => {
             console.log(error)
@@ -115,7 +117,7 @@ class App extends Component {
         e.preventDefault();
         Axios({
             method: 'POST',
-            url: '/users/sign_up',
+            url: '/users',
             data: {
                 user: {
                     email: email,
@@ -124,6 +126,7 @@ class App extends Component {
             }
         })
         .then(response => {
+            console.log('REGISTRATION SUCCESS', response)
             const modal = document.getElementById('registration-modal');
             modal.classList.remove('show');
             modal.setAttribute('aria-hidden', 'true');
@@ -134,7 +137,7 @@ class App extends Component {
         .catch(error => {
             console.log('Error', error)
             this.setState({
-                loginError: 'Something went wrong!'
+                registrationError: 'Something went wrong!'
             })
         });
     }
@@ -154,6 +157,7 @@ class App extends Component {
                     login={ this.login }
                 />
                 <RegistrationModal
+                    register={ this.register }
                 />
                 <div className="App">
                     <Main

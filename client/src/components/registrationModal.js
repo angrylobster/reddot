@@ -23,8 +23,7 @@ class RegistrationModal extends Component {
                         </div>
                         <div className="modal-body">
                             <Register
-                                login={ this.props.login }
-                                loginError={ this.props.loginError }
+                                register={ this.props.register }
                             />
                         </div>
                     </div>
