@@ -9,16 +9,29 @@ class Card extends Component {
         this.toggleComments = this.toggleComments.bind(this);
         this.getComments = this.getComments.bind(this);
         this.state={
-            upvoted: false,
-            downvoted: false,
+            voted: 0,
             total_votes: 0,
             comments: [],
-            displayComments: false
+            displayComments: false,
+            currentUser: null
+        }
+    }
+
+    componentDidUpdate(){
+        if (this.props.currentUser && !this.state.currentUser){
+            this.setState({
+                currentUser: this.props.currentUser,
+                voted: this.valueVoted()
+            })
         }
     }
 
     componentDidMount(){
-        this.setState({ total_votes: this.props.total_votes })
+        this.setState({ 
+            total_votes: this.props.total_votes,
+        })
+        // console.log(this.props.currentUser)
+
         //Update Caption total_votes
         // axios.put(`/captions/${this.props.id}.json`, {
         //     total_votes: 0
@@ -29,23 +42,37 @@ class Card extends Component {
         //     .catch(function(error) {
         //     console.log(error);
         // });
+    } 
+
+    valueVoted(){
+        if (this.getVote()){
+            return this.getVote().vote;
+        }
+    }
+
+    getVote(){
+        return this.props.votes.find(vote => {
+            if (vote.user_id === this.props.currentUser.id){
+                return vote
+            }
+        })
     }
 
     postVote(vote) {
-        if (!(this.props.current_user == null)) {
-            axios.post('/caption_votes.json', {
+        if (this.state.currentUser) {
+            axios.post('/caption_votes', {
                 vote: vote,
-                user_id: this.props.current_user.id,
+                user_id: this.props.currentUser.id,
                 caption_id: this.props.id
             })
                 .then(function(response) {
-                console.log(response);
+                console.log('response', response);
             })
                 .catch(function(error) {
-                console.log(error);
+                console.log('error', error);
             });
         }
-      }
+    }
 
     toggleVote(arrowClicked){
         if (!this.props.currentUser){
@@ -53,32 +80,28 @@ class Card extends Component {
         }
 
         if (arrowClicked === 'down'){
-            if (this.state.downvoted){
+            if (this.state.voted === -1){
                 this.setState({
-                    upvoted: false,
-                    downvoted: false
+                    voted: 0
                 })
                 //make vote to 0
                 this.postVote(0)
             } else {
                 this.setState({
-                    upvoted: false,
-                    downvoted: true
+                    voted: -1
                 })
                 //make vote to -1
                 this.postVote(-1)
             }
         } else {
-            if (this.state.upvoted){
+            if (this.state.voted === 1){
                 this.setState({
-                    upvoted: false,
-                    downvoted: false
+                    voted: 0
                 })
                 this.postVote(0)
             } else {
                 this.setState({
-                    upvoted: true,
-                    downvoted: false
+                    voted: 1
                 })
                 this.postVote(1)
             }
@@ -86,7 +109,7 @@ class Card extends Component {
     }
 
     getUpvoteArrow(){
-        if (this.state.upvoted){
+        if (this.state.voted === 1){
             return (
                 <img src="upvoted.png" onClick={ () => { this.toggleVote('up') }} alt="Upvoted arrow"/>
             )
@@ -98,7 +121,7 @@ class Card extends Component {
     }
 
     getDownvoteArrow(){
-        if (this.state.downvoted){
+        if (this.state.voted === -1){
             return (
                 <img src="downvoted.png" onClick={ () => { this.toggleVote('down') }} alt="Downvoted arrow"/>
             )
@@ -174,9 +197,8 @@ class Card extends Component {
                         comments={ null }
                         votes={ null }
                         date={ comment.updated_at }
-                        current_user={ this.state.user }
+                        current_user={ this.state.currentUser }
                         key={ index + comment }
-                        id={ index + comment.name }
                     />
                 )
             })

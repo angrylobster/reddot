@@ -11,7 +11,7 @@ class Login extends Component {
         this.state = {
             email: '',
             password: '',
-            error: ''
+            loginError: ''
         }
     }
 
@@ -33,7 +33,7 @@ class Login extends Component {
                 className="text-danger d-block"
                 id="login-error"
             >
-                { this.props.error }
+                { this.props.loginError }
             </small>
         )
     }
@@ -57,7 +57,7 @@ class Login extends Component {
                 id="login-form"
             >
                 <div className="form-group">
-                    { this.props.error ? this.getLoginErrorDiv() : null }
+                    { this.props.loginError ? this.getLoginErrorDiv() : null }
                     <label htmlFor="exampleInputEmail1">Email address</label>
                     <input 
                         type="email" 

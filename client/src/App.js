@@ -16,7 +16,7 @@ class App extends Component {
         this.setCurrentPost = this.setCurrentPost.bind(this);
         this.getLatestPost = this.getLatestPost.bind(this);
         this.state = {
-            error: null,
+            loginError: null,
             currentUser: null,
             currentPost: {img: "https://upload.wikimedia.org/wikipedia/commons/d/d2/Solid_white.png"} //Default White Image
         }
@@ -27,13 +27,27 @@ class App extends Component {
         setInterval(this.getLatestPost, 3000)
     }
 
+    getCurrentUser(){
+        Axios({
+            method: 'GET',
+            url: '/users/current_user',
+        })
+        .then(response =>{
+            console.log('response', response)
+            // this.setState({ currentUser: response })
+        })
+        .catch(error => {
+            console.log(error)
+        });
+    }
+
     getLatestPost() {
         Axios({
             method: 'GET',
             url: '/post/latest',
         })
         .then(response => {
-            this.setState({currentPost: response.data})
+            this.setState({ currentImg: response.data.currentImg })
         })
         .catch(error => {
             console.log(error)
@@ -91,7 +105,7 @@ class App extends Component {
         })
         .catch(error => {
             this.setState({
-                error: 'Invalid username or password!'
+                loginError: 'Invalid username or password!'
             })
         });
     }
@@ -107,13 +121,11 @@ class App extends Component {
                     setCurrentPost={ this.setCurrentPost }          
                 />
                 <Modal
-                    setCurrentUser={ this.setCurrentUser }
-                    error={ this.state.error }
+                    loginError={ this.state.loginError }
                     login={ this.login }
                 />
                 <div className="App">
                     <Main
-                        setCurrentUser={ this.setCurrentUser }
                         currentUser={ this.state.currentUser }
                         currentPost={ this.state.currentPost }
                     />

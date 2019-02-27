@@ -1,6 +1,14 @@
 import React, { Component } from 'react';
 import Captions from './captions';
 class Main extends Component {
+
+  // constructor(){
+  //   consol
+  //   this.state = {
+  //     currentUser: null
+  //   }
+  // }
+
   render() {
     return (
         <div
@@ -12,7 +20,6 @@ class Main extends Component {
                 alt="Caption this"
             />
             <Captions
-              setCurrentUser={ this.props.setCurrentUser }
               currentUser={ this.props.currentUser }
               currentPost={ this.props.currentPost }
             />
