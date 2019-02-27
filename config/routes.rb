@@ -1,7 +1,8 @@
 Rails.application.routes.draw do
   get '/activity', to: 'captions#activity'
 
-  get '/post', to: 'post#retrieve'
+  get '/post', to: 'post#index'
+  get '/post/latest', to: 'post#latest'
   post '/post', to: 'post#create'
 
   resources :caption_votes
