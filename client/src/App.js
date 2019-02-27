@@ -13,35 +13,37 @@ class App extends Component {
         this.login = this.login.bind(this);
         this.logout = this.logout.bind(this);
         this.setCurrentUser = this.setCurrentUser.bind(this);
-        this.setCurrentImg = this.setCurrentImg.bind(this);
+        this.setCurrentPost = this.setCurrentPost.bind(this);
         this.getLatestPost = this.getLatestPost.bind(this);
         this.state = {
             error: null,
             currentUser: null,
-            currentImg: "https://www.asiaone.com/sites/default/files/original_images/Apr2016/0401_gohyongwei2.jpg" //default img
+            currentPost: {img: "https://upload.wikimedia.org/wikipedia/commons/d/d2/Solid_white.png"} //Default White Image
         }
     }
 
     componentDidMount(){
+        this.getLatestPost()
         setInterval(this.getLatestPost, 3000)
     }
 
     getLatestPost() {
         Axios({
             method: 'GET',
-            url: '/post',
+            url: '/post/latest',
         })
         .then(response => {
-            this.setState({currentImg: response.data.currentImg})
-            console.log(this.state.currentImg)
+            this.setState({currentPost: response.data.post})
+
+             console.log("New STATE:", this.state.currentPost)
         })
         .catch(error => {
             console.log(error)
         });
     }
 
-    setCurrentImg(img) {
-        this.setState({ currentImg: img })
+    setCurrentPost(post) {
+        this.setState({ currentPost: post })
     }
 
     setCurrentUser(user){
@@ -97,7 +99,6 @@ class App extends Component {
     }
 
     render() {
-        console.log(this.state.currentUser)
         return (
             <React.Fragment>
                 <Navbar
@@ -105,7 +106,7 @@ class App extends Component {
                     logout={ this.logout }        
                     currentImg={ this.state.currentImg }
                     winningCaption={ this.state.winningCaption }
-                    setCurrentImg={ this.setCurrentImg }          
+                    setCurrentPost={ this.setCurrentPost }          
                 />
                 <Modal
                     setCurrentUser={ this.setCurrentUser }
@@ -116,7 +117,7 @@ class App extends Component {
                     <Main
                         setCurrentUser={ this.setCurrentUser }
                         currentUser={ this.state.currentUser }
-                        currentImg={ this.state.currentImg }
+                        currentPost={ this.state.currentPost }
                     />
                     <Activity/>
                 </div>

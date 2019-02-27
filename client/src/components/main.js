@@ -8,13 +8,13 @@ class Main extends Component {
         >
             <img
                 className="img__potd"
-                src={ this.props.currentImg.img }
+                src={ this.props.currentPost.img }
                 alt="Caption this"
             />
             <Captions
               setCurrentUser={ this.props.setCurrentUser }
               currentUser={ this.props.currentUser }
-              currentImg={ this.props.currentImg }
+              currentPost={ this.props.currentPost }
             />
         </div>
       

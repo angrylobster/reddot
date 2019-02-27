@@ -2,9 +2,14 @@ require 'nokogiri'
 require 'open-uri'
 
 class PostController < ApplicationController
-  def retrieve
+  def index
+    @Post = Post.all
+    render json: @Post
+  end
+
+  def latest
     @Post = Post.last
-    render json: { currentImg: @Post }
+    render json: { post: @Post }
   end
 
   def create
