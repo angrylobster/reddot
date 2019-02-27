@@ -24,7 +24,7 @@ class Modal extends Component {
                         <div className="modal-body">
                             <Login
                                 login={ this.props.login }
-                                error={ this.props.error }
+                                loginError={ this.props.loginError }
                             />
                         </div>
                     </div>

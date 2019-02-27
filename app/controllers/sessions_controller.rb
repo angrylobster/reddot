@@ -4,19 +4,12 @@ class SessionsController < Devise::SessionsController
     def create
         super
         session[:user_id] = current_user.id
-        p current_user
     end
 
-    # def create
-    #     resource = User.find_for_database_authentication(email: params[:user][:email])
-    #     return invalid_login_attempt unless resource
-    #     if resource.valid_password?(params[:user][:password])
-    #         sign_in :user, resource
-    #         redirect_to root_url
-    #         return
-    #     end
-    #     invalid_login_attempt
-    # end
+    def get_current_user
+        # byebug
+        render json: current_user
+    end
 
     private
     def respond_with(resource, _opts = {})

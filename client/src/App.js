@@ -15,20 +15,43 @@ class App extends Component {
         this.setCurrentUser = this.setCurrentUser.bind(this);
         this.setCurrentImg = this.setCurrentImg.bind(this);
         this.state = {
-            error: null,
+            loginError: null,
             currentUser: null,
             currentImg: "https://www.asiaone.com/sites/default/files/original_images/Apr2016/0401_gohyongwei2.jpg" //default img
         }
     }
 
     componentDidMount(){
+        this.getPost();
+        // this.getCurrentUser();
+
+        if (!this.state.currentUser){
+            this.getCurrentUser();
+        }
+
+    }
+
+    getCurrentUser(){
+        Axios({
+            method: 'GET',
+            url: '/users/current_user',
+        })
+        .then(response =>{
+            console.log('response', response)
+            // this.setState({ currentUser: response })
+        })
+        .catch(error => {
+            console.log(error)
+        });
+    }
+
+    getPost(){
         Axios({
             method: 'GET',
             url: '/post',
         })
         .then(response => {
-            this.setState({currentImg: response.data.currentImg})
-            console.log(this.state.currentImg)
+            this.setState({ currentImg: response.data.currentImg })
         })
         .catch(error => {
             console.log(error)
@@ -40,6 +63,7 @@ class App extends Component {
     }
 
     setCurrentUser(user){
+        console.log('setting current use')
         this.setState({
             currentUser: user
         })
@@ -86,13 +110,12 @@ class App extends Component {
         })
         .catch(error => {
             this.setState({
-                error: 'Invalid username or password!'
+                loginError: 'Invalid username or password!'
             })
         });
     }
 
     render() {
-        console.log(this.state.currentUser)
         return (
             <React.Fragment>
                 <Navbar
@@ -103,13 +126,11 @@ class App extends Component {
                     setCurrentImg={ this.setCurrentImg }          
                 />
                 <Modal
-                    setCurrentUser={ this.setCurrentUser }
-                    error={ this.state.error }
+                    loginError={ this.state.loginError }
                     login={ this.login }
                 />
                 <div className="App">
                     <Main
-                        setCurrentUser={ this.setCurrentUser }
                         currentUser={ this.state.currentUser }
                         currentImg={ this.state.currentImg }
                     />

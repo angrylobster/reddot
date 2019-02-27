@@ -30,10 +30,7 @@ class Captions extends Component {
                       return 0;
                   }
               }),
-              currentUser: json.data.user
           });
-          this.props.setCurrentUser(json.data.user);
-          //Set user state to current user
       })
       .catch(error => {
           return error;
@@ -41,10 +38,13 @@ class Captions extends Component {
   }
 
   componentDidMount(){
-      this.retrieveCaptionsData();
-      this.setState({
-        currentUser: this.props.currentUser
-      })
+        this.retrieveCaptionsData();
+        if (this.props.currentUser){
+            console.log('setting current user')
+            this.setState({
+                currentUser: this.props.currentUser
+            })
+        }
   }
 
   getCaptionCards(){
@@ -60,15 +60,14 @@ class Captions extends Component {
               comments={ caption.comments }
               votes={ caption.caption_votes }
               date={ caption.updated_at }
-              current_user={ this.state.user }
               key={ index + caption }
               id={ index + caption.name }
               renderViewComments={ true }
              />
           )
-      })
-  }
-
+        })
+    }
+    
     render() {
         return (
             <React.Fragment>
@@ -86,7 +85,7 @@ class Captions extends Component {
 class NewCaption extends Component{
 
     postCaption(input) {
-        console.log(this.props.currentImg)
+        // console.log(this.props.currentImg)
       axios.post('/captions.json', {
           caption: input,
           user_id: 0, //placeholder
