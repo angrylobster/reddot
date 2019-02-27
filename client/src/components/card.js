@@ -51,11 +51,12 @@ class Card extends Component {
     }
 
     getVote(){
-        return this.props.votes.find(vote => {
-            if (vote.user_id === this.props.currentUser.id){
-                return vote
-            }
-        })
+        console.log(this.props)
+        // return this.props.votes.find(vote => {
+        //     if (vote.user_id === this.props.currentUser.id){
+        //         return vote
+        //     }
+        // })
     }
 
     postVote(vote) {
