@@ -50,7 +50,6 @@ class CaptionsController < ApplicationController
     jsonHash = JSON.parse(jsonString)
     jsonHash['user_id'] = current_user.id
     @caption = Caption.new(jsonHash)
-
     respond_to do |format|
       if @caption.save
         format.html { redirect_to @caption, notice: 'Caption was successfully created.' }

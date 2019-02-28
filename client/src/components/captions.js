@@ -17,14 +17,15 @@ class Captions extends Component {
   }
 
   retrieveCaptionsData() {
+      var caption = this;
       axios.get('/captions')
       .then(json => {
         //Set caption state to have latest captions
         console.log('CAPTIONS', json)
-        if (this.state.currentCaptions[0].id === 0) {
-            this.setState({ currentCaptions: json.data });
-        } else if (this.props.currentPost.id !== this.state.currentCaptions[0].post_id) {
-            this.setState({ currentCaptions: json.data });
+        if (caption.state.currentCaptions[0].id === 0) {
+            caption.setState({ currentCaptions: json.data });
+        } else if (caption.props.currentPost.id !== caption.state.currentCaptions[0].post_id) {
+            caption.setState({ currentCaptions: json.data });
         }
       })
       .catch(error => {
@@ -48,23 +49,24 @@ class Captions extends Component {
           return (
             <Card
               currentUser={ this.props.currentUser }
-              content={ caption.caption_text }
-              poster={ caption.name }
-              total_votes={ caption.total_votes }
-              id={ caption.id }
-              user_id={ caption.user_id }
-              comments={ caption.comments }
-              votes={ caption.caption_votes }
-              date={ caption.updated_at }
-              key={ index + caption }
+            //   content={ caption.caption_text }
+            //   poster={ caption.name }
+            //   total_votes={ caption.total_votes }
+            //   id={ caption.id }
+            //   user_id={ caption.user_id }
+            //   comments={ caption.comments }
+            //   votes={ caption.caption_votes }
+            //   date={ caption.updated_at }
+            //   key={ index + caption }
               renderViewComments={ true }
+              caption={ caption }
              />
           )
         })
     }
     
     render() {
-        console.log('current captions', this.state.currentCaptions)
+        var self = this;
         return (
             <React.Fragment>
                 <div
@@ -72,15 +74,15 @@ class Captions extends Component {
                 >
                     { this.getCaptionCards() }
                 </div>
-                { this.props.currentUser ? <NewCaption currentPost={ this.props.currentPost } /> : null }
+                { this.props.currentUser ? <NewCaption currentPost={ this.props.currentPost} updateCaptions={self.retrieveCaptionsData} /> : null }
             </React.Fragment>
         );
     }
 }
 
 class NewCaption extends Component{
-
     postCaption(input) {
+      this.props.updateCaptions();
       axios.post('/captions.json', {
           caption: input,
           user_id: 0, //placeholder
