@@ -15,7 +15,10 @@
     "start": "concurrently --handle-input \"npm run server\" \"npm run client\"",
     "server": "rails server -p 3001",
     "client": "cd client/src && npm start",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "yarn --cwd client install && yarn --cwd client build",
+    "deploy": "cp -a client/build/. public/",
+    "heroku-postbuild": "yarn build && yarn deploy"
   },
   "repository": {
     "type": "git",
