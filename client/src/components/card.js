@@ -19,15 +19,19 @@ class Card extends Component {
         }
     }
 
+
     retrieveCaptionVotesData() {
+        console.log(this.props)
+        var card = this;
+
         axios.post(`/get_caption_votes`, {
             caption_id: this.props.caption.id,
             user_id: this.props.caption.user_id
         })
         .then(response => {
             console.log("Retrieved Caption Vote Data ",response);
-            this.setState({voted: response.data.caption_vote[0].vote})
-            this.setState({total_votes: response.data.total_votes})
+            card.setState({voted: response.data.caption_vote[0].vote})
+            card.setState({total_votes: response.data.total_votes})
         })
         .catch(error => {
             console.log(error);
@@ -35,6 +39,8 @@ class Card extends Component {
     }
 
     componentDidUpdate(){
+        // this.retrieveCaptionVotesData()
+
         console.log("CURRENT TOTAL VOTES", this.state.total_votes, this.state.voted)
         if (this.props.currentUser && !this.state.currentUser){
             this.setState({
@@ -67,8 +73,10 @@ class Card extends Component {
     //     //     }
     //     // })
     // }
-
+    // const abc = this;
     postVote(vote) {
+        var card = this;
+
         if (this.state.currentUser) {
             axios.post('/caption_votes', {
                 vote: vote,
@@ -76,8 +84,8 @@ class Card extends Component {
                 caption_id: this.props.caption.id
             })
                 .then(function(response) {
-                console.log('response', response);
-                this.setState({total_votes: response.data.total_votes})
+                console.log('Post Vote Response', response);
+                card.setState({total_votes: response.data.total_votes});
             })
                 .catch(function(error) {
                 console.log('error', error);
