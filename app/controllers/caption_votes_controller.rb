@@ -13,7 +13,6 @@ class CaptionVotesController < ApplicationController
     jsonString = request.body.read
     jsonHash = JSON.parse(jsonString)
     @caption_votes = CaptionVote.where(caption_id: jsonHash['caption_id'], user_id: jsonHash['user_id'])
-
     render json: {caption_vote: @caption_vote, total_votes: total_votes(jsonHash['caption_id'])}
   end
 
