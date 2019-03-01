@@ -13,31 +13,31 @@ class App extends Component {
         super();
         this.login = this.login.bind(this);
         this.logout = this.logout.bind(this);
-        this.setCurrentUser = this.setCurrentUser.bind(this);
-        this.setCurrentPost = this.setCurrentPost.bind(this);
-        this.getLatestPost = this.getLatestPost.bind(this);
         this.register = this.register.bind(this);
+
+        this.setCurrentUser = this.setCurrentUser.bind(this);
+        this.setLatestPost = this.setLatestPost.bind(this);
+
         this.state = {
-            loginError: null,
+            loginError: '',
+            showLoginModal: false,
             registrationError: '',
             currentUser: null,
-            currentPost: {img: "https://upload.wikimedia.org/wikipedia/commons/d/d2/Solid_white.png"} //Default White Image
+            currentPost: { img: "https://upload.wikimedia.org/wikipedia/commons/d/d2/Solid_white.png" } //Default White Image
         }
     }
 
     componentDidMount(){
-        this.getLatestPost();
-        this.getCurrentUser();
-        setInterval(this.getLatestPost, 3000)
+        this.setCurrentUser();
+        this.setLatestPost();
     }
 
-    getCurrentUser(){
+    setCurrentUser(){
         Axios({
             method: 'GET',
             url: '/users/get_current_user',
         })
         .then(response =>{
-            console.log('response', response)
             this.setState({ currentUser: response.data })
         })
         .catch(error => {
@@ -45,7 +45,11 @@ class App extends Component {
         });
     }
 
-    getLatestPost() {
+    setCurrentPost(post) {
+        this.setState({ currentPost: post })
+    }
+
+    setLatestPost() {
         Axios({
             method: 'GET',
             url: '/post/latest',
@@ -58,16 +62,6 @@ class App extends Component {
         });
     }
 
-    setCurrentPost(post) {
-        this.setState({ currentPost: post })
-    }
-
-    setCurrentUser(user){
-        this.setState({
-            currentUser: user
-        })
-    }
-
     logout(e){
         e.preventDefault();
         Axios({
@@ -75,10 +69,7 @@ class App extends Component {
             url: '/users/sign_out',
         })
         .then(response => {
-            console.log(response)
-            this.setState({
-                currentUser: null
-            })
+            this.setState({ currentUser: null })
         })
         .catch(error => {
             console.log(error)
@@ -103,13 +94,10 @@ class App extends Component {
             modal.setAttribute('aria-hidden', 'true');
             modal.setAttribute('style', 'display: none');
             document.getElementsByClassName('modal-backdrop')[0].remove();
-            this.setCurrentUser(response.data);
+            this.setState({ currentUser: response.data });
         })
         .catch(error => {
-            console.log('Error', error)
-            this.setState({
-                loginError: 'Invalid username or password!'
-            })
+            this.setState({ loginError: 'Invalid username or password!' })
         });
     }
 
@@ -126,20 +114,17 @@ class App extends Component {
             }
         })
         .then(response => {
-            console.log('REGISTRATION SUCCESS', response)
             const modal = document.getElementById('registration-modal');
             modal.classList.remove('show');
             modal.setAttribute('aria-hidden', 'true');
             modal.setAttribute('style', 'display: none');
             document.getElementsByClassName('modal-backdrop')[0].remove();
-            this.setCurrentUser(response.data);
+            this.setState({ currentUser: response.data });
         })
         .catch(error => {
-            console.log('Error', error)
-            this.setState({
-                registrationError: 'Something went wrong!'
-            })
-        });
+            console.log('Registration error: ', error);
+            this.setState({ registrationError: 'Something went wrong!' })
+        })
     }
 
     render() {
@@ -148,17 +133,9 @@ class App extends Component {
                 <Navbar
                     currentUser={ this.state.currentUser }  
                     logout={ this.logout }        
-                    currentImg={ this.state.currentImg }
-                    winningCaption={ this.state.winningCaption }
-                    setCurrentPost={ this.setCurrentPost }          
                 />
-                <LoginModal
-                    loginError={ this.state.loginError }
-                    login={ this.login }
-                />
-                <RegistrationModal
-                    register={ this.register }
-                />
+                <RegistrationModal register={ this.register } />
+                <LoginModal/>
                 <div className="App">
                     <Main
                         currentUser={ this.state.currentUser }
