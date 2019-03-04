@@ -12,6 +12,14 @@ class Navbar extends Component{
         this.setState({ currentUser: this.props.currentUser });
     }
 
+    componentDidUpdate(){
+        if (!this.state.currentUser && this.props.currentUser){
+            this.setState({ currentUser: this.props.currentUser });
+        } else if (this.state.currentUser && !this.props.currentUser) {
+            this.setState({ currentUser: null });
+        }
+    }
+
     getLoginOrLogoutButton(){
         if (!this.state.currentUser){
             return( 

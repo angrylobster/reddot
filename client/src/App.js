@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import Main from './components/main';
+import Content from './components/content';
 import Activity from './components/activity';
 import Navbar from './components/navbar';
 import LoginModal from './components/loginModal';
@@ -20,7 +20,6 @@ class App extends Component {
 
         this.state = {
             loginError: '',
-            showLoginModal: false,
             registrationError: '',
             currentUser: null,
             currentPost: { img: "https://upload.wikimedia.org/wikipedia/commons/d/d2/Solid_white.png" } //Default White Image
@@ -97,6 +96,7 @@ class App extends Component {
             this.setState({ currentUser: response.data });
         })
         .catch(error => {
+            console.log(error)
             this.setState({ loginError: 'Invalid username or password!' })
         });
     }
@@ -135,9 +135,12 @@ class App extends Component {
                     logout={ this.logout }        
                 />
                 <RegistrationModal register={ this.register } />
-                <LoginModal/>
+                <LoginModal 
+                    login={ this.login }
+                    loginError={ this.state.loginError }
+                />
                 <div className="App">
-                    <Main
+                    <Content
                         currentUser={ this.state.currentUser }
                         currentPost={ this.state.currentPost }
                     />

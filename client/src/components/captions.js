@@ -21,7 +21,7 @@ class Captions extends Component {
       axios.get('/captions')
       .then(json => {
         //Set caption state to have latest captions
-        console.log('CAPTIONS', json)
+        
         if (caption.state.currentCaptions[0].id === 0) {
             caption.setState({ currentCaptions: json.data });
         } else if (caption.props.currentPost.id !== caption.state.currentCaptions[0].post_id) {
@@ -57,7 +57,7 @@ class Captions extends Component {
             //   comments={ caption.comments }
             //   votes={ caption.caption_votes }
             //   date={ caption.updated_at }
-            //   key={ index + caption }
+              key={ index + caption }
               renderViewComments={ true }
               caption={ caption }
              />

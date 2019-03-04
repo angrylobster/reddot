@@ -27,13 +27,19 @@ class Login extends Component {
         this.props.login(e, this.state.email, this.state.password);
     }
 
+    componentDidUpdate(){
+        if (this.state.loginError !== this.props.loginError){
+            this.setState({ loginError: this.props.loginError })
+        }
+    }
+
     getLoginErrorDiv(){
         return (
             <small
                 className="text-danger d-block"
                 id="login-error"
             >
-                { this.props.loginError }
+                { this.state.loginError }
             </small>
         )
     }
