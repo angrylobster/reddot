@@ -1,118 +1,124 @@
 import React, { Component } from 'react';
-import Card from './card.js';
+import Caption from './caption.js';
 const axios = require('axios');
-
 
 class Captions extends Component {
 
-  constructor(){
-      super();
-      this.retrieveCaptionsData = this.retrieveCaptionsData.bind(this);
-      this.getCaptionCards = this.getCaptionCards.bind(this);
+    constructor() {
+        super();
+        this.getCaptions = this.getCaptions.bind(this);
+        this.getCaptionComponents = this.getCaptionComponents.bind(this);
 
-      this.state = {
-          currentCaptions: [{id: 0}],
-          currentUser: null
-      }
-  }
-
-  retrieveCaptionsData() {
-      var caption = this;
-      axios.get('/captions')
-      .then(json => {
-        //Set caption state to have latest captions
-        
-        if (caption.state.currentCaptions[0].id === 0) {
-            caption.setState({ currentCaptions: json.data });
-        } else if (caption.props.currentPost.id !== caption.state.currentCaptions[0].post_id) {
-            caption.setState({ currentCaptions: json.data });
+        this.state = {
+            captions: [],
+            currentUser: null
         }
-      })
-      .catch(error => {
-          return error;
-      })
-  }
+    }
 
-  componentDidUpdate(){
-      this.retrieveCaptionsData();
-    if (this.props.currentUser && !this.state.currentUser){
-        console.log('setting current user')
-        this.setState({
-            currentUser: this.props.currentUser
+    componentDidMount(){
+        this.getCaptions();
+    }
+
+    componentDidUpdate() {
+        if (!this.state.currentUser && this.props.currentUser){
+            this.setState({ currentUser: this.props.currentUser });
+        } else if (this.state.currentUser && !this.props.currentUser) {
+            this.setState({ currentUser: null });
+        }
+    }
+
+    getCaptions() {
+        axios.get('/captions')
+        .then(captions => {
+            console.log('captions', captions)
+            this.setState({ captions: captions.data });
+        })
+        .catch(error => {
+            console.log(error);
         })
     }
 
-  }
-
-  getCaptionCards(){
-      return this.state.currentCaptions.map((caption, index) => {
-          return (
-            <Card
-              currentUser={ this.props.currentUser }
-            //   content={ caption.caption_text }
-            //   poster={ caption.name }
-            //   total_votes={ caption.total_votes }
-            //   id={ caption.id }
-            //   user_id={ caption.user_id }
-            //   comments={ caption.comments }
-            //   votes={ caption.caption_votes }
-            //   date={ caption.updated_at }
-              key={ index + caption }
-              renderViewComments={ true }
-              caption={ caption }
-             />
-          )
+    getCaptionComponents() {
+        return this.state.captions.map((caption, index) => {
+            return ( 
+                <Caption 
+                    currentUser = { this.state.currentUser }
+                    caption = { caption }
+                    key = { index + caption }
+                />
+            )
         })
     }
-    
+
+    getNewCaptionComponent(){
+        if(this.state.currentUser){
+            return (
+                <NewCaption
+                    getCaptions={ this.getCaptions }
+                    currentUser={ this.state.currentUser }
+                    currentPost={ this.props.currentPost }
+                />
+            )
+        }
+    }
+
     render() {
-        var self = this;
-        return (
+        return ( 
             <React.Fragment>
-                <div
-                    style={{overflowY: "scroll", height: '280px'}}
+                <div 
+                    style = {{
+                        overflowY: "scroll",
+                        height: '280px'
+                        }}
                 >
-                    { this.getCaptionCards() }
-                </div>
-                { this.props.currentUser ? <NewCaption currentPost={ this.props.currentPost} updateCaptions={self.retrieveCaptionsData} /> : null }
+                    { this.getCaptionComponents() } 
+                </div> 
+                    { this.getNewCaptionComponent() }
             </React.Fragment>
         );
     }
 }
 
-class NewCaption extends Component{
-    postCaption(input) {
-      this.props.updateCaptions();
-      axios.post('/captions.json', {
-          caption: input,
-          user_id: 0, //placeholder
-          post_id: this.props.currentPost.id
-      })
-          .then(function(response) {
-          console.log(response);
-      })
-          .catch(function(error) {
-          console.log(error);
-      });
+class NewCaption extends Component {
+
+    constructor(){
+        super();
+        this.doPostCaption = this.doPostCaption.bind(this);
+        this.postCaption = this.postCaption.bind(this);
     }
 
-    render(){
-        return (
-            <div
-                className="m-3 border-top"
-            >
+    postCaption(caption) {
+        axios.post('/captions', {
+            caption: caption,
+            user_id: this.props.currentUser.id,
+            post_id: this.props.currentPost.id
+        })
+        .then(function (response) {
+            console.log(response);
+            this.props.getCaptions();
+        })
+        .catch(function (error) {
+            console.log(error);
+        });
+    }
+
+    doPostCaption(e){
+        if (e.keyCode === 13){
+            this.postCaption(e.target.value)
+        }
+    }
+
+    render() {
+        // console.log('current post', this.props.currentPost, 'current user', this.props.currentUser);
+        return ( 
+            <div className = "m-3 border-top">
                 <input 
-                    className="border-0 mt-3 w-100 pl-2 pr-2"     
-                    placeholder="Write your caption here..."
-                    onKeyDown={e => { 
-                        if (e.keyCode === 13){
-                            this.postCaption(e.target.value);
-                        } 
-                    }}
-                />
+                    className = "border-0 mt-3 w-100 pl-2 pr-2"
+                    placeholder = "Write your caption here..."
+                    onKeyDown = { this.doPostCaption }
+                /> 
             </div>
         )
-
     }
 }
 

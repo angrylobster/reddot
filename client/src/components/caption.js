@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 const axios = require('axios');
-class Card extends Component {
+class Caption extends Component {
 
     constructor(){
         super();
@@ -206,7 +206,7 @@ class Card extends Component {
         if (this.props.caption.comments){
             return this.props.caption.comments.map((comment, index) => {
                 return (
-                    <Card
+                    <Caption
                         content={ comment.comment_text }
                         poster={ comment.name }
                         total_votes={ comment.comment_votes }
@@ -227,6 +227,7 @@ class Card extends Component {
     }
 
     render() {
+        console.log('this.props.caption', this.props.caption);
         return (
             <div className="d-flex p-2">
                 <div
@@ -259,4 +260,4 @@ class Card extends Component {
     }
 }
 
-export default Card;
+export default Caption;

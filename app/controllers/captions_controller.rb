@@ -52,7 +52,7 @@ class CaptionsController < ApplicationController
     @caption = Caption.new(jsonHash)
     respond_to do |format|
       if @caption.save
-        format.html { redirect_to @caption, notice: 'Caption was successfully created.' }
+        # format.html { redirect_to @caption, notice: 'Caption was successfully created.' }
         format.json { render :show, status: :created, location: @caption }
       else
         format.html { render :new }

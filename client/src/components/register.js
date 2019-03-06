@@ -8,6 +8,7 @@ class Register extends Component {
         this.changeHandler = this.changeHandler.bind(this)
         this.state = {
             email: '',
+            name: '',
             password: '',
             confirmPassword: '',
             registrationError: ''
@@ -18,6 +19,12 @@ class Register extends Component {
         this.setState({
             registrationError: this.props.registrationError
         })
+    }
+
+    componentDidUpdate(prevProps){
+        if (prevProps.registrationError !== this.props.registrationError){
+            this.setState({ registrationError: this.props.registrationError })
+        }
     }
 
     changeHandler(e){
@@ -39,13 +46,11 @@ class Register extends Component {
 
     doRegister(e){
         e.preventDefault();
-        if (this.state.password === this.state.confirmPassword){
-            this.props.register(e, this.state.email, this.state.password);
-        } else {
-            this.setState({
-                registrationError: 'Passwords do not match!'
-            })
-        }
+        this.props.register({
+            email: this.state.email,
+            name: this.state.name,
+            password: this.state.password
+        });
     }
 
     displayError(){
@@ -72,6 +77,17 @@ class Register extends Component {
                         placeholder="Enter email"
                         onChange={this.changeHandler}
                         autoComplete="on"
+                    />
+                </div>                
+                <div className="form-group">
+                    <label htmlFor="registration-name">Username</label>
+                    <input 
+                        className="form-control" 
+                        id="registration-name" 
+                        name="name" 
+                        placeholder="Enter username"
+                        onChange={this.changeHandler}
+                        autoComplete="off"
                     />
                 </div>
                 <div className="form-group">

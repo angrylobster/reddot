@@ -44,10 +44,6 @@ class App extends Component {
         });
     }
 
-    setCurrentPost(post) {
-        this.setState({ currentPost: post })
-    }
-
     setLatestPost() {
         Axios({
             method: 'GET',
@@ -75,15 +71,14 @@ class App extends Component {
         })
     }
     
-    login(e, email, password){
-        e.preventDefault();
+    login(credentials){
         Axios({
             method: 'POST',
             url: '/users/sign_in',
             data: {
                 user: {
-                    email: email,
-                    password: password
+                    email: credentials.email,
+                    password: credentials.password
                 }
             }
         })
@@ -93,23 +88,25 @@ class App extends Component {
             modal.setAttribute('aria-hidden', 'true');
             modal.setAttribute('style', 'display: none');
             document.getElementsByClassName('modal-backdrop')[0].remove();
-            this.setState({ currentUser: response.data });
         })
         .catch(error => {
             console.log(error)
             this.setState({ loginError: 'Invalid username or password!' })
-        });
+        })
+        .then(() => {
+            this.setCurrentUser();
+        })
     }
 
-    register(e, email, password){
-        e.preventDefault();
+    register(credentials){
         Axios({
             method: 'POST',
             url: '/users',
             data: {
                 user: {
-                    email: email,
-                    password: password
+                    email: credentials.email,
+                    name: credentials.name,
+                    password: credentials.password
                 }
             }
         })
@@ -119,22 +116,28 @@ class App extends Component {
             modal.setAttribute('aria-hidden', 'true');
             modal.setAttribute('style', 'display: none');
             document.getElementsByClassName('modal-backdrop')[0].remove();
-            this.setState({ currentUser: response.data });
+            this.login(credentials);
         })
         .catch(error => {
-            console.log('Registration error: ', error);
-            this.setState({ registrationError: 'Something went wrong!' })
+            let errorObject = error.response.data.error;
+            this.setState({ 
+                registrationError: 'Error: ' + Object.keys(errorObject)[0] + ' ' + errorObject[Object.keys(errorObject)[0]]
+            })
         })
     }
 
     render() {
+        console.log('app.state.registrationerror', this.state.registrationError)
         return (
             <React.Fragment>
                 <Navbar
                     currentUser={ this.state.currentUser }  
                     logout={ this.logout }        
                 />
-                <RegistrationModal register={ this.register } />
+                <RegistrationModal 
+                    register={ this.register } 
+                    registrationError={ this.state.registrationError }
+                />
                 <LoginModal 
                     login={ this.login }
                     loginError={ this.state.loginError }

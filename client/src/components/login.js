@@ -24,7 +24,11 @@ class Login extends Component {
     }
 
     doLogin(e){
-        this.props.login(e, this.state.email, this.state.password);
+        e.preventDefault();
+        this.props.login({
+            email: this.state.email, 
+            password: this.state.password
+        });
     }
 
     componentDidUpdate(){
