@@ -6,7 +6,7 @@ class Captions extends Component {
 
     constructor() {
         super();
-        this.getCaptions = this.getCaptions.bind(this);
+        this.setCaptions = this.setCaptions.bind(this);
         this.getCaptionComponents = this.getCaptionComponents.bind(this);
 
         this.state = {
@@ -16,7 +16,7 @@ class Captions extends Component {
     }
 
     componentDidMount(){
-        this.getCaptions();
+        this.setCaptions();
     }
 
     componentDidUpdate() {
@@ -27,10 +27,10 @@ class Captions extends Component {
         }
     }
 
-    getCaptions() {
+    setCaptions() {
         axios.get('/captions')
         .then(captions => {
-            console.log('captions', captions)
+            console.log('All captions', captions)
             this.setState({ captions: captions.data });
         })
         .catch(error => {
@@ -54,7 +54,7 @@ class Captions extends Component {
         if(this.state.currentUser){
             return (
                 <NewCaption
-                    getCaptions={ this.getCaptions }
+                    setCaptions={ this.setCaptions }
                     currentUser={ this.state.currentUser }
                     currentPost={ this.props.currentPost }
                 />
@@ -94,22 +94,23 @@ class NewCaption extends Component {
             post_id: this.props.currentPost.id
         })
         .then(function (response) {
-            console.log(response);
-            this.props.getCaptions();
         })
         .catch(function (error) {
             console.log(error);
+        })
+        .then(() => {
+            this.props.setCaptions();
         });
     }
 
     doPostCaption(e){
         if (e.keyCode === 13){
-            this.postCaption(e.target.value)
+            this.postCaption(e.target.value);
+            e.target.value = "";
         }
     }
 
     render() {
-        // console.log('current post', this.props.currentPost, 'current user', this.props.currentUser);
         return ( 
             <div className = "m-3 border-top">
                 <input 

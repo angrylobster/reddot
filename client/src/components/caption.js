@@ -1,258 +1,242 @@
 import React, { Component } from 'react';
 const axios = require('axios');
 class Caption extends Component {
-
-    constructor(){
+    constructor() {
         super();
         this.postVote = this.postVote.bind(this);
         this.toggleVote = this.toggleVote.bind(this);
         this.toggleComments = this.toggleComments.bind(this);
         this.getComments = this.getComments.bind(this);
-        this.retrieveCaptionVotesData = this.retrieveCaptionVotesData.bind(this);
 
-        this.state={
-            voted: 0,
-            total_votes: 0,
+        this.state = {
             comments: [],
+            currentUser: null,
             displayComments: false,
-            currentUser: null
-        }
+            total_votes: 0,
+            voted: 0,
+        };
     }
 
-
-    retrieveCaptionVotesData() {
-        
-        var card = this;
-
-        axios.post(`/get_caption_votes`, {
-            caption_id: this.props.caption.id,
-            user_id: this.props.caption.user_id
-        })
-        .then(response => {
-            if (response.data.caption_vote){
-                card.setState({voted: response.data.caption_vote[0].vote})
-                card.setState({total_votes: response.data.total_votes})
-
-            }
-        })
-        .catch(error => {
-            console.log(error);
-        })
+    componentDidMount() {
+        this.setState({
+            voted: this.getUserVoteValue(),
+            total_votes: this.props.caption.total_votes,
+        });
     }
 
-    componentDidUpdate(){
-        // this.retrieveCaptionVotesData()
-
-        if (this.props.currentUser && !this.state.currentUser){
+    componentDidUpdate() {
+        if (this.props.currentUser && !this.state.currentUser) {
             this.setState({
-                currentUser: this.props.currentUser
-                // voted: this.valueVoted()
-            })
-        } else if (this.state.currentUser && !this.props.currentUser){
+                currentUser: this.props.currentUser,
+            });
+        } else if (this.state.currentUser && !this.props.currentUser) {
             this.setState({
                 currentUser: null,
-                voted: 0
-            })
-        }
-    }
-
-    componentDidMount(){
-        this.retrieveCaptionVotesData()
-    } 
-
-    // valueVoted(){
-    //     if (this.getVote()){
-    //         return this.getVote().vote;
-    //     }
-    // }
-
-    // getVote(){
-    //     console.log(this.props)
-    //     // return this.props.votes.find(vote => {
-    //     //     if (vote.user_id === this.props.currentUser.id){
-    //     //         return vote
-    //     //     }
-    //     // })
-    // }
-    // const abc = this;
-    postVote(vote) {
-        var card = this;
-
-        if (this.state.currentUser) {
-            axios.post('/caption_votes', {
-                vote: vote,
-                user_id: this.props.currentUser.data.id,
-                caption_id: this.props.caption.id
-            })
-                .then(function(response) {
-                card.setState({total_votes: response.data.total_votes});
-            })
-                .catch(function(error) {
-                console.log('error', error);
+                voted: 0,
             });
         }
     }
 
-    toggleVote(arrowClicked){
-        if (!this.props.currentUser){
-            return
+    getUserVoteValue() {
+        if (this.getUserVote()) {
+            return this.getUserVote().vote;
         }
-        if (arrowClicked === 'down'){
-            if (this.state.voted === -1){
-                this.setState({
-                    voted: 0
+    }
+
+    getUserVote() {
+        if (this.props.currentUser) {
+            return this.props.caption.caption_votes.find(vote => {
+                console.log(vote.user_id, this.props.currentUser.id);
+                if (vote.user_id === this.props.currentUser.id) {
+                    console.log('found');
+                    return vote;
+                }
+            });
+        } else {
+            return false;
+        }
+    }
+
+    postVote(vote) {
+        if (this.props.currentUser) {
+            axios
+                .post('/caption_votes', {
+                    vote: vote,
+                    user_id: this.props.currentUser.id,
+                    caption_id: this.props.caption.id,
                 })
-                //make vote to 0
-                this.postVote(0)
+                .then(response => {
+                    console.log('Vote success', response);
+                    this.setState({
+                        total_votes: response.data.total_votes,
+                        voted: vote,
+                    });
+                })
+                .catch(error => {
+                    console.log('Vote error', error);
+                });
+        }
+    }
+
+    toggleVote(arrowClicked) {
+        if (!this.props.currentUser) {
+            return;
+        }
+        if (arrowClicked === 'down') {
+            if (this.state.voted === -1) {
+                this.postVote(0);
             } else {
-                this.setState({
-                    voted: -1
-                })
-                //make vote to -1
-                this.postVote(-1)
+                this.postVote(-1);
             }
         } else {
-            if (this.state.voted === 1){
-                this.setState({
-                    voted: 0
-                })
-                this.postVote(0)
+            if (this.state.voted === 1) {
+                this.postVote(0);
             } else {
-                this.setState({
-                    voted: 1
-                })
-                this.postVote(1)
+                this.postVote(1);
             }
         }
     }
 
-    getUpvoteArrow(){
-        if (this.state.voted === 1){
+    getUpvoteArrow() {
+        if (this.state.voted === 1) {
             return (
-                <img src="upvoted.png" onClick={ () => { this.toggleVote('up') }} alt="Upvoted arrow"/>
-            )
+                <img
+                    src="upvoted.png"
+                    onClick={() => {
+                        this.toggleVote('up');
+                    }}
+                    alt="Upvoted arrow"
+                />
+            );
         } else {
             return (
-                <img src="upvote.png" onClick={ () => { this.toggleVote('up') }} alt="Upvote arrow"/>
-            )
+                <img
+                    src="upvote.png"
+                    onClick={() => {
+                        this.toggleVote('up');
+                    }}
+                    alt="Upvote arrow"
+                />
+            );
         }
     }
 
-    getDownvoteArrow(){
-        if (this.state.voted === -1){
+    getDownvoteArrow() {
+        if (this.state.voted === -1) {
             return (
-                <img src="downvoted.png" onClick={ () => { this.toggleVote('down') }} alt="Downvoted arrow"/>
-            )
+                <img
+                    src="downvoted.png"
+                    onClick={() => {
+                        this.toggleVote('down');
+                    }}
+                    alt="Downvoted arrow"
+                />
+            );
         } else {
             return (
-                <img src="downvote.png" onClick={ () => { this.toggleVote('down') }} alt="Downvote arrow"/>
-            )
+                <img
+                    src="downvote.png"
+                    onClick={() => {
+                        this.toggleVote('down');
+                    }}
+                    alt="Downvote arrow"
+                />
+            );
         }
     }
 
-    getTimeTranspired(date){
+    getTimeTranspired(date) {
         let timeTranspired;
         let diffMilliseconds = Date.now() - Date.parse(date);
         let diff = {
-            seconds: (diffMilliseconds / 1000).toFixed(1),
-            minutes: (diffMilliseconds / (1000 * 60)).toFixed(1),
-            hours: (diffMilliseconds / (1000 * 60 * 60)).toFixed(1),
-            days: (diffMilliseconds / (1000 * 60 * 60 * 24)).toFixed(1)
-        }
+            seconds: (diffMilliseconds / 1000).toFixed(0),
+            minutes: (diffMilliseconds / (1000 * 60)).toFixed(0),
+            hours: (diffMilliseconds / (1000 * 60 * 60)).toFixed(0),
+            days: (diffMilliseconds / (1000 * 60 * 60 * 24)).toFixed(0),
+        };
 
         if (diff.seconds < 60) {
-            timeTranspired = diff.seconds + " seconds ago"
+            timeTranspired = diff.seconds + ' seconds ago';
         } else if (diff.minutes < 60) {
-            timeTranspired = diff.minutes + " minutes ago"
+            timeTranspired = diff.minutes + ' minutes ago';
         } else if (diff.hours < 24) {
-            timeTranspired = diff.hours + " hours ago"
+            timeTranspired = diff.hours + ' hours ago';
         } else {
-            timeTranspired = diff.days + " days ago"
+            timeTranspired = diff.days + ' days ago';
         }
 
-        return (
-            <small>
-                { timeTranspired }
-            </small>
-        )
+        return <small>{timeTranspired}</small>;
     }
 
-    renderViewComments(){
-        if (this.props.renderViewComments === true){
-            return (
-                <small
-                    onClick={ this.toggleComments }
-                >
-                    {this.state.displayComments === true ? 'hide comments' : 'view comments' }
-                </small>
-            )
-        }
+    getCommentsText() {
+        let commentsTextPrompt = '';
+        this.state.displayComments ? commentsTextPrompt = 'hide comments' : commentsTextPrompt = 'view comments';
+        return <small onClick={this.toggleComments}>{commentsTextPrompt}</small>;
     }
 
-    toggleComments(){
-        console.log(this.state.displayComments)
-        if (this.state.displayComments === true){
+    toggleComments() {
+        console.log(this.state.displayComments);
+        if (this.state.displayComments === true) {
             this.setState({
-                displayComments: false
-            })
+                displayComments: false,
+            });
         } else {
             this.setState({
-                displayComments: true
-            })
+                displayComments: true,
+            });
         }
     }
 
-    getComments(){
-        if (this.props.caption.comments){
+    getComments() {
+        if (this.props.caption.comments) {
             return this.props.caption.comments.map((comment, index) => {
                 return (
                     <Caption
-                        content={ comment.comment_text }
-                        poster={ comment.name }
-                        total_votes={ comment.comment_votes }
-                        id={ comment.id }
-                        user_id={ comment.user_id }
-                        comments={ null }
-                        votes={ null }
-                        date={ comment.updated_at }
-                        current_user={ this.state.currentUser }
-                        key={ index + comment }
+                        content={comment.comment_text}
+                        poster={comment.name}
+                        total_votes={comment.comment_votes}
+                        id={comment.id}
+                        user_id={comment.user_id}
+                        comments={null}
+                        votes={null}
+                        date={comment.updated_at}
+                        current_user={this.state.currentUser}
+                        key={index + comment}
                     />
-                )
-            })
+                );
+            });
         }
-        return (
-            null
-        )
+        return null;
+    }
+
+    getPointsString(){
+        let pointsString = '';
+        this.state.total_votes === 1 ? pointsString = 'point' : pointsString = 'points';
+        return pointsString;
     }
 
     render() {
-        console.log('this.props.caption', this.props.caption);
+        console.log('Caption state:', this.state, 'Caption props', this.props);
         return (
             <div className="d-flex p-2">
-                <div
-                    className="div__wrapper-votearrows"
-                >
-                    { this.getUpvoteArrow() }
-                    { this.getDownvoteArrow() }
-                </div> 
-                <div
-                    className="w-100 pl-2"
-                >
+                <div className="div__wrapper-votearrows">
+                    {this.getUpvoteArrow()}
+                    {this.getDownvoteArrow()}
+                </div>
+                <div className="w-100 pl-2">
                     <div className="d-flex">
                         <small>{this.props.caption.name}</small>
-                        <small>{this.state.total_votes > 1 ? `${this.state.total_votes} points`: `${this.state.total_votes} point`}</small>
-                        <small>{this.getTimeTranspired(this.props.caption.updated_at)}</small>
+                        <small>
+                            {this.state.total_votes}
+                            {" " + this.getPointsString()}
+                        </small>
+                        <small>
+                            {this.getTimeTranspired(this.props.caption.created_at)}
+                        </small>
                     </div>
-                    <div
-                    >
-                        <p> 
-                            { this.props.caption.caption_text }
-                        </p>
-                        <div className="d-flex">
-                            { this.renderViewComments() }
-                        </div>
-                        { this.state.displayComments === true ? this.getComments() : null }
+                    <div>
+                        <p>{this.props.caption.caption_text}</p>
+                        <div className="d-flex">{this.getCommentsText()}</div>
                     </div>
                 </div>
             </div>

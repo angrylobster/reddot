@@ -127,7 +127,6 @@ class App extends Component {
     }
 
     render() {
-        console.log('app.state.registrationerror', this.state.registrationError)
         return (
             <React.Fragment>
                 <Navbar
