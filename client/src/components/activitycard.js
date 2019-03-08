@@ -22,10 +22,10 @@ class ActivityCard extends Component {
         let timeTranspired;
         let diffMilliseconds = Date.now() - Date.parse(date);
         let diff = {
-            seconds: (diffMilliseconds / 1000).toFixed(1),
-            minutes: (diffMilliseconds / (1000 * 60)).toFixed(1),
-            hours: (diffMilliseconds / (1000 * 60 * 60)).toFixed(1),
-            days: (diffMilliseconds / (1000 * 60 * 60 * 24)).toFixed(1)
+            seconds: (diffMilliseconds / 1000).toFixed(0),
+            minutes: (diffMilliseconds / (1000 * 60)).toFixed(0),
+            hours: (diffMilliseconds / (1000 * 60 * 60)).toFixed(0),
+            days: (diffMilliseconds / (1000 * 60 * 60 * 24)).toFixed(0)
         }
 
         if (diff.seconds < 60) {

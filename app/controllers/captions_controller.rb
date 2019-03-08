@@ -7,6 +7,7 @@ class CaptionsController < ApplicationController
     @captions = Post.last.captions.all.left_outer_joins(:user).distinct.select('captions.*', 'users.name').map do |caption|
       caption.modify
     end
+    @captions.sort_by!{ |caption| caption[:total_votes] * (-1) }
     render json: @captions
   end
 
