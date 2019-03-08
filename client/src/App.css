@@ -13,13 +13,10 @@
   }
 }
 
-.modal-open {
-  overflow: scroll;
-  overflow-x: hidden;
-}
 
 body{
   background-color: #f7f7f7;  
+  overflow-y: scroll;
 }
 
 img{

@@ -32,7 +32,7 @@ class Captions extends Component {
         if (this.state.captions.length === 0){
             return (
                 <div
-                    className="border-0 mt-3 w-100 pl-2 pr-2 text-muted text-center"
+                    className="border-0 mt-3 mb-3 w-100 pl-2 pr-2 text-muted text-center"
                 >No captions yet. Be the first one!</div>
             )
         } else {
