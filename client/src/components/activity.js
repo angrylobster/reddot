@@ -56,6 +56,8 @@ class Activity extends Component {
                     verb = 'wrote';
                     noun = 'comment';
                     break;
+                default:
+                    break;
             }
 
             return (

@@ -24,7 +24,17 @@ class Login extends Component {
     }
 
     doLogin(e){
-        this.props.login(e, this.state.email, this.state.password);
+        e.preventDefault();
+        this.props.login({
+            email: this.state.email, 
+            password: this.state.password
+        });
+    }
+
+    componentDidUpdate(){
+        if (this.state.loginError !== this.props.loginError){
+            this.setState({ loginError: this.props.loginError })
+        }
     }
 
     getLoginErrorDiv(){
@@ -33,7 +43,7 @@ class Login extends Component {
                 className="text-danger d-block"
                 id="login-error"
             >
-                { this.props.loginError }
+                { this.state.loginError }
             </small>
         )
     }

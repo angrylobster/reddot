@@ -5,6 +5,10 @@
     "axios": "^0.18.0"
   },
   "version": "1.0.0",
+  "engines": {
+    "node": "8.11.4",
+    "yarn": "1.13.0"
+  },
   "description": "This README would normally document whatever steps are necessary to get the application up and running.",
   "main": "index.js",
   "directories": {
@@ -15,7 +19,10 @@
     "start": "concurrently --handle-input \"npm run server\" \"npm run client\"",
     "server": "rails server -p 3001",
     "client": "cd client/src && npm start",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "yarn --cwd client install && yarn --cwd client build",
+    "deploy": "cp -a client/build/. public/",
+    "heroku-postbuild": "yarn build && yarn deploy"
   },
   "repository": {
     "type": "git",

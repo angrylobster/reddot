@@ -24,6 +24,7 @@ class RegistrationModal extends Component {
                         <div className="modal-body">
                             <Register
                                 register={ this.props.register }
+                                registrationError={ this.props.registrationError }
                             />
                         </div>
                     </div>

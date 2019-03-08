@@ -25,15 +25,24 @@ class CommentVotesController < ApplicationController
   # POST /comment_votes
   # POST /comment_votes.json
   def create
-    @comment_vote = CommentVote.new(comment_vote_params)
-
-    respond_to do |format|
-      if @comment_vote.save
-        format.html { redirect_to @comment_vote, notice: 'Comment vote was successfully created.' }
-        format.json { render :show, status: :created, location: @comment_vote }
+    jsonString = request.body.read
+    jsonHash = JSON.parse(jsonString)
+    #CHECK IF VOTE EXIST. IF EXIST, EDIT Vote Integer. IF NOT, CREATE Vote.
+    if CommentVote.where(user_id: jsonHash['user_id'], comment_id: jsonHash['comment_id']).any?
+      #Vote Entry Exist. Update Vote
+      @comment_vote = CommentVote.where(user_id: jsonHash['user_id'], comment_id: jsonHash['comment_id'])
+      if @comment_vote.update(vote: jsonHash["vote"])
+        render json: {comment_vote: @comment_vote, total_votes: total_votes(jsonHash['comment_id'])}, status: 200
       else
-        format.html { render :new }
-        format.json { render json: @comment_vote.errors, status: :unprocessable_entity }
+        render json: {'error': @comment_vote.errors}, status: 401
+      end
+    else
+      #Vote Entry Don't Exist. Create Vote
+      @comment_vote = CommentVote.new(jsonHash.slice('vote', 'user_id', 'comment_id'))
+      if @comment_vote.save
+        render json: {comment_vote: @comment_vote, total_votes: total_votes(jsonHash['comment_id'])}, status: 200
+        else
+        render json: {'error': @comment_vote.errors}, status: 401
       end
     end
   end
@@ -71,5 +80,16 @@ class CommentVotesController < ApplicationController
     # Never trust parameters from the scary internet, only allow the white list through.
     def comment_vote_params
       params.require(:comment_vote).permit(:vote)
+    end
+
+    def total_votes(comment_id)
+      total = 0
+      votes_on_comment = CommentVote.where(comment_id: comment_id)
+      votes_on_comment.each do |vote|
+        total = total + vote.vote
+      end
+      @comment = Comment.where(id: comment_id)
+      @comment.update(total_votes: total)
+      return total
     end
 end

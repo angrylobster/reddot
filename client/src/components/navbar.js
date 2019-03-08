@@ -1,15 +1,27 @@
 import React, { Component } from 'react';
-
 class Navbar extends Component{
 
     constructor(){
         super();
         this.state = {
+            currentUser: null
+        }
+    }
+
+    componentDidMount(){
+        this.setState({ currentUser: this.props.currentUser });
+    }
+
+    componentDidUpdate(){
+        if (!this.state.currentUser && this.props.currentUser){
+            this.setState({ currentUser: this.props.currentUser });
+        } else if (this.state.currentUser && !this.props.currentUser) {
+            this.setState({ currentUser: null });
         }
     }
 
     getLoginOrLogoutButton(){
-        if (!this.props.currentUser){
+        if (!this.state.currentUser){
             return( 
                 <button 
                     className="btn btn-outline-light float-right"
@@ -32,7 +44,7 @@ class Navbar extends Component{
     }
 
     getRegisterButton(){
-        if (!this.props.currentUser){
+        if (!this.state.currentUser){
             return (
                 <button
                     className="btn btn-outline-light float-right ml-3"
