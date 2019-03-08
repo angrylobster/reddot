@@ -4,6 +4,7 @@ class RegistrationsController < Devise::RegistrationsController
     def create
       build_resource(sign_up_params)
       if resource.save
+        sign_in resource
         render_resource(resource)
       else
         render :json => {error: resource.errors}, status: 401

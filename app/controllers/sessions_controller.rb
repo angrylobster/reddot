@@ -4,8 +4,6 @@ class SessionsController < Devise::SessionsController
     def create
         super
         session[:user_id] = current_user.id
-        p current_user
-        p session[:user_id]
     end
 
     def get_current_user
