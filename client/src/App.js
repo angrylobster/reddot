@@ -8,8 +8,7 @@ import './App.css';
 import RegistrationModal from './components/registrationModal';
 
 class App extends Component {
-    
-    constructor(){
+    constructor() {
         super();
         this.login = this.login.bind(this);
         this.logout = this.logout.bind(this);
@@ -22,26 +21,29 @@ class App extends Component {
             loginError: '',
             registrationError: '',
             currentUser: null,
-            currentPost: { img: "https://upload.wikimedia.org/wikipedia/commons/d/d2/Solid_white.png" } //Default White Image
-        }
+            currentPost: {
+                img:
+                    'https://upload.wikimedia.org/wikipedia/commons/d/d2/Solid_white.png',
+            }, //Default White Image
+        };
     }
 
-    componentDidMount(){
+    componentDidMount() {
         this.setCurrentUser();
         this.setLatestPost();
     }
 
-    setCurrentUser(){
+    setCurrentUser() {
         Axios({
             method: 'GET',
             url: '/users/get_current_user',
         })
-        .then(response =>{
-            this.setState({ currentUser: response.data })
-        })
-        .catch(error => {
-            console.log(error)
-        });
+            .then(response => {
+                this.setState({ currentUser: response.data });
+            })
+            .catch(error => {
+                console.log(error);
+            });
     }
 
     setLatestPost() {
@@ -49,56 +51,57 @@ class App extends Component {
             method: 'GET',
             url: '/post/latest',
         })
-        .then(response => {
-            this.setState({ currentPost: response.data })
-        })
-        .catch(error => {
-            console.log(error)
-        });
+            .then(response => {
+                this.setState({ currentPost: response.data });
+            })
+            .catch(error => {
+                console.log(error);
+            })
+            .then(() => {
+                this.setCurrentUser();
+            });
     }
 
-    logout(e){
+    logout(e) {
         e.preventDefault();
         Axios({
             method: 'DELETE',
             url: '/users/sign_out',
         })
-        .then(response => {
-            this.setState({ currentUser: null })
-        })
-        .catch(error => {
-            console.log(error)
-        })
+            .then(response => {
+                this.setState({ currentUser: null });
+            })
+            .catch(error => {
+                console.log(error);
+            });
     }
-    
-    login(credentials){
+
+    login(credentials) {
         Axios({
             method: 'POST',
             url: '/users/sign_in',
             data: {
                 user: {
                     email: credentials.email,
-                    password: credentials.password
-                }
-            }
+                    password: credentials.password,
+                },
+            },
         })
-        .then(response => {
-            const modal = document.getElementById('login-modal');
-            modal.classList.remove('show');
-            modal.setAttribute('aria-hidden', 'true');
-            modal.setAttribute('style', 'display: none');
-            document.getElementsByClassName('modal-backdrop')[0].remove();
-        })
-        .catch(error => {
-            console.log(error)
-            this.setState({ loginError: 'Invalid username or password!' })
-        })
-        .then(() => {
-            this.setCurrentUser();
-        })
+            .then(response => {
+                const modal = document.getElementById('login-modal');
+                modal.classList.remove('show');
+                modal.setAttribute('aria-hidden', 'true');
+                modal.setAttribute('style', 'display: none');
+                document.getElementsByClassName('modal-backdrop')[0].remove();
+                this.setState({currentUser: response.data})
+            })
+            .catch(error => {
+                console.log(error);
+                this.setState({ loginError: 'Invalid username or password!' });
+            })
     }
 
-    register(credentials){
+    register(credentials) {
         Axios({
             method: 'POST',
             url: '/users',
@@ -106,47 +109,52 @@ class App extends Component {
                 user: {
                     email: credentials.email,
                     name: credentials.name,
-                    password: credentials.password
-                }
-            }
+                    password: credentials.password,
+                },
+            },
         })
-        .then(response => {
-            const modal = document.getElementById('registration-modal');
-            modal.classList.remove('show');
-            modal.setAttribute('aria-hidden', 'true');
-            modal.setAttribute('style', 'display: none');
-            document.getElementsByClassName('modal-backdrop')[0].remove();
-            this.login(credentials);
-        })
-        .catch(error => {
-            let errorObject = error.response.data.error;
-            this.setState({ 
-                registrationError: 'Error: ' + Object.keys(errorObject)[0] + ' ' + errorObject[Object.keys(errorObject)[0]]
+            .then(response => {
+                console.log(response);
+                const modal = document.getElementById('registration-modal');
+                modal.classList.remove('show');
+                modal.setAttribute('aria-hidden', 'true');
+                modal.setAttribute('style', 'display: none');
+                document.getElementsByClassName('modal-backdrop')[0].remove();
+                this.setState({currentUser: response.data})
             })
-        })
+            .catch(error => {
+                let errorObject = error.response.data.error;
+                this.setState({
+                    registrationError:
+                        'Error: ' +
+                        Object.keys(errorObject)[0] +
+                        ' ' +
+                        errorObject[Object.keys(errorObject)[0]],
+                });
+            });
     }
 
     render() {
         return (
             <React.Fragment>
                 <Navbar
-                    currentUser={ this.state.currentUser }  
-                    logout={ this.logout }        
+                    currentUser={this.state.currentUser}
+                    logout={this.logout}
                 />
-                <RegistrationModal 
-                    register={ this.register } 
-                    registrationError={ this.state.registrationError }
+                <RegistrationModal
+                    register={this.register}
+                    registrationError={this.state.registrationError}
                 />
-                <LoginModal 
-                    login={ this.login }
-                    loginError={ this.state.loginError }
+                <LoginModal
+                    login={this.login}
+                    loginError={this.state.loginError}
                 />
                 <div className="App">
                     <Content
-                        currentUser={ this.state.currentUser }
-                        currentPost={ this.state.currentPost }
+                        currentUser={this.state.currentUser}
+                        currentPost={this.state.currentPost}
                     />
-                    <Activity/>
+                    <Activity />
                 </div>
             </React.Fragment>
         );

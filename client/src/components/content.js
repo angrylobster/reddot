@@ -20,7 +20,7 @@ class Content extends Component {
 
     render() {
         return (
-            <div className="w-50 bg-white border border-light rounded overflow-hidden d-inline">
+            <div className="w-50 bg-white border border-gray rounded overflow-hidden d-inline">
                 <img
                     className="overflow-hidden"
                     src={ this.props.currentPost.img }

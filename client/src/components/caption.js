@@ -1,27 +1,22 @@
 import React, { Component } from 'react';
+import Comment from './comment.js';
 const axios = require('axios');
 class Caption extends Component {
-    constructor() {
-        super();
+    constructor(props) {
+        super(props);
         this.postVote = this.postVote.bind(this);
         this.toggleVote = this.toggleVote.bind(this);
         this.toggleComments = this.toggleComments.bind(this);
+        this.toggleReplying = this.toggleReplying.bind(this);
         this.getComments = this.getComments.bind(this);
-
         this.state = {
-            comments: [],
-            currentUser: null,
+            comments: this.props.caption.comments,
+            currentUser: this.props.currentUser,
             displayComments: false,
-            total_votes: 0,
-            voted: 0,
-        };
-    }
-
-    componentDidMount() {
-        this.setState({
+            isReplying: false,
+            totalVotes: this.props.caption.total_votes,
             voted: this.getUserVoteValue(),
-            total_votes: this.props.caption.total_votes,
-        });
+        };
     }
 
     componentDidUpdate() {
@@ -32,7 +27,7 @@ class Caption extends Component {
         } else if (this.state.currentUser && !this.props.currentUser) {
             this.setState({
                 currentUser: null,
-                voted: 0,
+                isReplying: false,
             });
         }
     }
@@ -46,10 +41,10 @@ class Caption extends Component {
     getUserVote() {
         if (this.props.currentUser) {
             return this.props.caption.caption_votes.find(vote => {
-                console.log(vote.user_id, this.props.currentUser.id);
                 if (vote.user_id === this.props.currentUser.id) {
-                    console.log('found');
                     return vote;
+                } else {
+                    return null;
                 }
             });
         } else {
@@ -68,13 +63,16 @@ class Caption extends Component {
                 .then(response => {
                     console.log('Vote success', response);
                     this.setState({
-                        total_votes: response.data.total_votes,
+                        totalVotes: response.data.total_votes,
                         voted: vote,
                     });
                 })
                 .catch(error => {
                     console.log('Vote error', error);
-                });
+                })
+                .then(() => {
+                    this.props.setCaptions();
+                })
         }
     }
 
@@ -95,6 +93,76 @@ class Caption extends Component {
                 this.postVote(1);
             }
         }
+    }
+
+    toggleComments() {
+        if (this.props.comments.length === 0) {
+            return;
+        }
+        if (this.props.displayComments === true) {
+            this.setState({
+                displayComments: false,
+            });
+        } else {
+            this.setState({
+                displayComments: true,
+            });
+        }
+    }
+
+    toggleReplying() {
+        console.log(this.state.isReplying);
+        if (this.state.isReplying) {
+            this.setState({
+                isReplying: false,
+            });
+        } else {
+            this.setState({
+                isReplying: true,
+            });
+        }
+    }
+
+    postComment(comment) {
+        axios
+            .post('/comments', {
+                comment: comment,
+                user_id: this.state.currentUser.id,
+                caption_id: this.props.caption.id,
+                total_votes: 0,
+            })
+            .then(response => {
+                console.log('Comment success', response);
+            })
+            .catch(error => {
+                console.log('Comment error', error);
+            })
+            .then(() => { 
+                this.setState({ isReplying: false });
+                this.props.setCaptions();
+            });
+    }
+
+    doComment(e) {
+        if (e.keyCode === 13) {
+            this.postComment(e.target.value);
+        }
+    }
+
+    getReplyForm() {
+        if (!this.state.isReplying){
+            return;
+        }
+        return (
+            <input
+                className="rounded border border-gray w-100 p-1 pl-2 pr-2 mt-1"
+                placeholder="Reply"
+                onKeyDown={e => {
+                    this.doComment(e);
+                }}
+                style={{ fontSize: '13px' }}
+            />
+        );
     }
 
     getUpvoteArrow() {
@@ -168,55 +236,57 @@ class Caption extends Component {
         return <small>{timeTranspired}</small>;
     }
 
-    getCommentsText() {
+    getCommentsString() {
         let commentsTextPrompt = '';
-        this.state.displayComments ? commentsTextPrompt = 'hide comments' : commentsTextPrompt = 'view comments';
-        return <small onClick={this.toggleComments}>{commentsTextPrompt}</small>;
-    }
-
-    toggleComments() {
-        console.log(this.state.displayComments);
-        if (this.state.displayComments === true) {
-            this.setState({
-                displayComments: false,
-            });
+        if (!this.props.comments){
+            commentsTextPrompt = 'no comments'; 
         } else {
-            this.setState({
-                displayComments: true,
-            });
+            if (this.props.comments.length === 0) {
+                commentsTextPrompt = 'no comments';
+            } else if (this.state.displayComments) {
+                commentsTextPrompt = 'hide comments';
+            } else {
+                commentsTextPrompt =
+                    'view comments(' + this.props.comments.length + ')';
+            }
         }
+
+        return (
+            <>
+                <small onClick={this.toggleComments}>
+                    {commentsTextPrompt}
+                </small>
+                <small onClick={this.toggleReplying}>reply</small>
+            </>
+        );
     }
 
     getComments() {
-        if (this.props.caption.comments) {
+        if (this.state.displayComments && this.props.caption.comments) {
             return this.props.caption.comments.map((comment, index) => {
                 return (
-                    <Caption
-                        content={comment.comment_text}
-                        poster={comment.name}
-                        total_votes={comment.comment_votes}
-                        id={comment.id}
-                        user_id={comment.user_id}
-                        comments={null}
-                        votes={null}
-                        date={comment.updated_at}
-                        current_user={this.state.currentUser}
+                    <Comment
+                        currentUser={this.state.currentUser}
+                        captionID={this.props.caption.id}
+                        comment={comment}
                         key={index + comment}
+                        getTimeTranspired={this.getTimeTranspired}
+                        setCaptions={this.props.setCaptions}
                     />
                 );
             });
         }
-        return null;
     }
 
-    getPointsString(){
-        let pointsString = '';
-        this.state.total_votes === 1 ? pointsString = 'point' : pointsString = 'points';
+    getPointsString() {
+        let pointsString = this.state.totalVotes + " ";
+        this.state.totalVotes === 1
+            ? (pointsString += 'point')
+            : (pointsString += 'points');
         return pointsString;
     }
 
     render() {
-        console.log('Caption state:', this.state, 'Caption props', this.props);
         return (
             <div className="d-flex p-2">
                 <div className="div__wrapper-votearrows">
@@ -227,16 +297,19 @@ class Caption extends Component {
                     <div className="d-flex">
                         <small>{this.props.caption.name}</small>
                         <small>
-                            {this.state.total_votes}
-                            {" " + this.getPointsString()}
+                            {this.getPointsString()}
                         </small>
                         <small>
-                            {this.getTimeTranspired(this.props.caption.created_at)}
+                            {this.getTimeTranspired(
+                                this.props.caption.created_at
+                            )}
                         </small>
                     </div>
                     <div>
                         <p>{this.props.caption.caption_text}</p>
-                        <div className="d-flex">{this.getCommentsText()}</div>
+                        <div className="d-flex">{this.getCommentsString()}</div>
+                        {this.getComments()}
+                        {this.getReplyForm()}
                     </div>
                 </div>
             </div>

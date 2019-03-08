@@ -51,7 +51,7 @@ class CaptionVotesController < ApplicationController
       if @caption_vote.save
         render json: {caption_vote: @caption_vote, total_votes: total_votes(jsonHash['caption_id'])}
         else
-        render json: @caption_vote.errors
+        render json: {'error': @caption_vote.errors}, status: 401
       end
     end
   end

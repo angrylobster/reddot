@@ -26,13 +26,15 @@ class Caption < ApplicationRecord
       hash = {}
       hash[:id] = comment.id
       hash[:comment_text] = comment.comment
-      hash[:comment_votes] = comment.total_votes
+      hash[:comment_total_votes] = comment.total_votes
+      hash[:comment_votes] = comment.comment_votes
       hash[:poster_id] = comment.user_id
       hash[:created_at] = comment.created_at
       hash[:updated_at] = comment.updated_at
       hash[:name] = comment.user.name
       result.push(hash)
     end
+    result.sort_by!{ |x| x[:comment_total_votes] * (-1) }
     return result
   end
 

@@ -50,19 +50,12 @@ class CaptionsController < ApplicationController
     jsonHash = JSON.parse(jsonString)
     jsonHash['user_id'] = current_user.id
     @caption = Caption.new(jsonHash)
-    # respond_to do |format|
-      if @caption.save
-        puts "OK SAVED"
-        # format.html { redirect_to @caption, notice: 'Caption was successfully created.' }
-        # format.json { render :show, status: :created, location: @caption }
-        render json: {"caption": @caption}, status: 200
-      else
-        puts "NOT SAVED"
-        # format.html { render :new }
-        # format.json { render json: @caption.errors, status: :unprocessable_entity }
-        render json: {"errors": @caption.errors}, status: 401
-      end
-    # end
+    
+    if @caption.save
+      render json: {"caption": @caption}, status: 200
+    else
+      render json: {"errors": @caption.errors}, status: 401
+    end
   end
 
   # PATCH/PUT /captions/1

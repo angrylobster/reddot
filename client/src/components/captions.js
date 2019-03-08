@@ -23,14 +23,14 @@ class Captions extends Component {
         if (!this.state.currentUser && this.props.currentUser){
             this.setState({ currentUser: this.props.currentUser });
         } else if (this.state.currentUser && !this.props.currentUser) {
-            this.setState({ currentUser: null });
+            this.setState({ currentUser: null });   
         }
     }
 
     setCaptions() {
         axios.get('/captions')
         .then(captions => {
-            console.log('All captions', captions)
+            console.log('All captions', captions.data)
             this.setState({ captions: captions.data });
         })
         .catch(error => {
@@ -39,12 +39,14 @@ class Captions extends Component {
     }
 
     getCaptionComponents() {
+        // console.log('Captions state:', this.state.captions);
         return this.state.captions.map((caption, index) => {
             return ( 
                 <Caption 
                     currentUser = { this.state.currentUser }
                     caption = { caption }
-                    key = { index + caption }
+                    setCaptions = { this.setCaptions }
+                    key = { index + caption + this.state.currentUser}
                 />
             )
         })
@@ -93,9 +95,9 @@ class NewCaption extends Component {
             user_id: this.props.currentUser.id,
             post_id: this.props.currentPost.id
         })
-        .then(function (response) {
+        .then(response => {
         })
-        .catch(function (error) {
+        .catch(error => {
             console.log(error);
         })
         .then(() => {
