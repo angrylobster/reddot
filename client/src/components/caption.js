@@ -9,6 +9,7 @@ class Caption extends Component {
         this.toggleComments = this.toggleComments.bind(this);
         this.toggleReplying = this.toggleReplying.bind(this);
         this.getComments = this.getComments.bind(this);
+        this.commentInput = React.createRef();
         this.state = {
             displayComments: false,
             isReplying: false,
@@ -21,6 +22,9 @@ class Caption extends Component {
             this.setState({
                 voted: this.getUserVoteValue(),
             });
+        }
+        if (this.commentInput.current){
+            this.commentInput.current.focus({preventScroll:false});
         }
     }
 
@@ -104,7 +108,6 @@ class Caption extends Component {
     }
 
     toggleReplying() {
-        console.log(this.state.isReplying);
         if (this.state.isReplying) {
             this.setState({
                 isReplying: false,
@@ -151,12 +154,13 @@ class Caption extends Component {
         }
         return (
             <input
-                className="rounded border border-gray w-100 p-1 pl-2 pr-2 mt-1"
+                className="rounded border border-gray w-100 p-1 pl-2 pr-2 mt-1 comment-input"
                 placeholder="Reply"
                 onKeyDown={e => {
                     this.doComment(e);
                 }}
                 style={{ fontSize: '13px' }}
+                ref={this.commentInput}
             />
         );
     }
