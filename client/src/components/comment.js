@@ -2,10 +2,6 @@ import React, { Component } from 'react';
 const axios = require('axios');
 
 class Comment extends Component {
-    constructor(props) {
-        super(props);
-    }
-
     getUserVoteValue() {
         if (this.getUserVote()) {
             return this.getUserVote().vote;
