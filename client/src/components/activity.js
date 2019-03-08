@@ -16,7 +16,6 @@ class Activity extends Component {
     retrieveActivitiesData() {
         axios.get('/activity')
         .then(activities => {
-            // console.log(activities);
             this.setState({
                 activities: activities.data.sort((a, b) => {
                     if (a.updated_at > b.updated_at){
@@ -39,7 +38,7 @@ class Activity extends Component {
     }
 
     getActivityCards(){
-        return this.state.activities.slice(0,10).map((activity, index) => {
+        return this.state.activities.slice(0,40).map((activity, index) => {
             let verb = '';
             let noun = '';
 
@@ -64,7 +63,6 @@ class Activity extends Component {
                 <ActivityCard
                     verb={ verb }
                     noun={ noun }
-                    link='#'
                     name={ activity.name }
                     key={ index + activity}
                     date={ activity.updated_at }

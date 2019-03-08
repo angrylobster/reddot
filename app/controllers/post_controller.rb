@@ -8,7 +8,7 @@ class PostController < ApplicationController
   end
 
   def latest
-    if ((Time.zone.now - Post.last.created_at) > 3600) #Every 1 Hour (For Testing Purpose)
+    if ((Time.zone.now - Post.last.created_at) > 86400) #Every 1 Hour (For Testing Purpose)
       ##Take Current Img And Winning Caption and post to Twitter/Instagram
       
       ##Generate new image for next post

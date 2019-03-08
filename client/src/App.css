@@ -13,13 +13,10 @@
   }
 }
 
-.modal-open {
-  overflow: scroll;
-  overflow-x: hidden;
-}
 
 body{
   background-color: #f7f7f7;  
+  overflow-y: scroll;
 }
 
 img{
@@ -55,7 +52,7 @@ small{
 .div__wrapper-utility{
   background-color: white;
   width: 250px;
-  height: 300px;
+  height: 500px;
   border: 1px solid lightgrey;
   border-radius: 5px;
   padding: 20px;

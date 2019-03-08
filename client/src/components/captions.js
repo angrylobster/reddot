@@ -29,16 +29,24 @@ class Captions extends Component {
     }
 
     getCaptionComponents() {
-        return this.state.captions.map((caption, index) => {
+        if (this.state.captions.length === 0){
             return (
-                <Caption
-                    currentUser={this.props.currentUser}
-                    caption={caption}
-                    setCaptions={this.setCaptions}
-                    key={index + caption + this.props.currentUser}
-                />
-            );
-        });
+                <div
+                    className="border-0 mt-3 mb-3 w-100 pl-2 pr-2 text-muted text-center"
+                >No captions yet. Be the first one!</div>
+            )
+        } else {
+            return this.state.captions.map((caption, index) => {
+                return (
+                    <Caption
+                        currentUser={this.props.currentUser}
+                        caption={caption}
+                        setCaptions={this.setCaptions}
+                        key={index + caption + this.props.currentUser}
+                    />
+                );
+            });
+        }
     }
 
     getNewCaptionComponent() {
@@ -54,12 +62,14 @@ class Captions extends Component {
     }
 
     render() {
+        let height = '';
+        this.state.captions.length < 7 ? height = 50 + (50 * this.state.captions.length) + ' px' : height = '400px';
         return (
             <React.Fragment>
                 <div
                     style={{
                         overflowY: 'scroll',
-                        height: '280px',
+                        height: height,
                     }}
                 >
                     {this.getCaptionComponents()}

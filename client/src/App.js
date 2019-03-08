@@ -69,6 +69,9 @@ class App extends Component {
             url: '/users/sign_out',
         })
             .then(response => {
+                document.body.classList = "pt-5";
+                document.body.removeAttribute('style');
+                document.querySelector('nav').removeAttribute('style');
                 this.setState({ currentUser: null });
             })
             .catch(error => {
@@ -136,7 +139,7 @@ class App extends Component {
 
     render() {
         return (
-            <React.Fragment>
+            <>
                 <Navbar
                     currentUser={this.state.currentUser}
                     logout={this.logout}
@@ -156,7 +159,7 @@ class App extends Component {
                     />
                     <Activity />
                 </div>
-            </React.Fragment>
+            </>
         );
     }
 }
