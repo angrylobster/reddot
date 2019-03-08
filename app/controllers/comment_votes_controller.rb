@@ -30,10 +30,7 @@ class CommentVotesController < ApplicationController
     #CHECK IF VOTE EXIST. IF EXIST, EDIT Vote Integer. IF NOT, CREATE Vote.
     if CommentVote.where(user_id: jsonHash['user_id'], comment_id: jsonHash['comment_id']).any?
       #Vote Entry Exist. Update Vote
-      @comment = Comment.where(caption_id: jsonHash['caption_id'], user_id: jsonHash['poster_id'])
-      p @comment
       @comment_vote = CommentVote.where(user_id: jsonHash['user_id'], comment_id: jsonHash['comment_id'])
-      p @comment_vote
       if @comment_vote.update(vote: jsonHash["vote"])
         render json: {comment_vote: @comment_vote, total_votes: total_votes(jsonHash['comment_id'])}, status: 200
       else
@@ -42,7 +39,6 @@ class CommentVotesController < ApplicationController
     else
       #Vote Entry Don't Exist. Create Vote
       @comment_vote = CommentVote.new(jsonHash.slice('vote', 'user_id', 'comment_id'))
-      p @comment_vote
       if @comment_vote.save
         render json: {comment_vote: @comment_vote, total_votes: total_votes(jsonHash['comment_id'])}, status: 200
         else

@@ -56,7 +56,6 @@ class Comment extends Component {
                     comment_id: this.props.comment.id,
                 })
                 .then(response => {
-                    // console.log('Vote success', response);
                     this.setState({
                         total_votes: response.data.total_votes,
                         voted: vote,
@@ -65,7 +64,7 @@ class Comment extends Component {
                 .catch(error => {
                     console.log('Vote error', error);
                 })
-                .then(() => { 
+                .then(() => {
                     this.props.setCaptions();
                 });
         }
@@ -128,7 +127,6 @@ class Comment extends Component {
     }
 
     render() {
-        // console.log('Comment props', this.props.comment, 'Comment state', this.state);
         return (
             <div className="d-flex p-2">
                 <div className="div__wrapper-votearrows">
@@ -138,9 +136,7 @@ class Comment extends Component {
                 <div className="w-100 pl-2">
                     <div className="d-flex">
                         <small>{this.props.comment.name}</small>
-                        <small>
-                            {this.getPointsString()}
-                        </small>
+                        <small>{this.getPointsString()}</small>
                         <small>
                             {this.props.getTimeTranspired(
                                 this.props.comment.created_at

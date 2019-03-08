@@ -10,24 +10,16 @@ class Caption extends Component {
         this.toggleReplying = this.toggleReplying.bind(this);
         this.getComments = this.getComments.bind(this);
         this.state = {
-            comments: this.props.caption.comments,
-            currentUser: this.props.currentUser,
             displayComments: false,
             isReplying: false,
-            totalVotes: this.props.caption.total_votes,
             voted: this.getUserVoteValue(),
         };
     }
 
     componentDidUpdate() {
-        if (this.props.currentUser && !this.state.currentUser) {
+        if (this.state.voted !== this.getUserVoteValue()) {
             this.setState({
-                currentUser: this.props.currentUser,
-            });
-        } else if (this.state.currentUser && !this.props.currentUser) {
-            this.setState({
-                currentUser: null,
-                isReplying: false,
+                voted: this.getUserVoteValue(),
             });
         }
     }
@@ -72,7 +64,7 @@ class Caption extends Component {
                 })
                 .then(() => {
                     this.props.setCaptions();
-                })
+                });
         }
     }
 
@@ -96,10 +88,11 @@ class Caption extends Component {
     }
 
     toggleComments() {
-        if (this.props.comments.length === 0) {
+        console.log(this.state);
+        if (this.props.caption.comments.length === 0) {
             return;
         }
-        if (this.props.displayComments === true) {
+        if (this.state.displayComments === true) {
             this.setState({
                 displayComments: false,
             });
@@ -127,7 +120,7 @@ class Caption extends Component {
         axios
             .post('/comments', {
                 comment: comment,
-                user_id: this.state.currentUser.id,
+                user_id: this.props.currentUser.id,
                 caption_id: this.props.caption.id,
                 total_votes: 0,
             })
@@ -137,8 +130,11 @@ class Caption extends Component {
             .catch(error => {
                 console.log('Comment error', error);
             })
-            .then(() => { 
-                this.setState({ isReplying: false });
+            .then(() => {
+                this.setState({ 
+                    isReplying: false,
+                    displayComments: true
+                });
                 this.props.setCaptions();
             });
     }
@@ -150,7 +146,7 @@ class Caption extends Component {
     }
 
     getReplyForm() {
-        if (!this.state.isReplying){
+        if (!this.state.isReplying) {
             return;
         }
         return (
@@ -238,16 +234,16 @@ class Caption extends Component {
 
     getCommentsString() {
         let commentsTextPrompt = '';
-        if (!this.props.comments){
-            commentsTextPrompt = 'no comments'; 
+        if (!this.props.caption.comments) {
+            commentsTextPrompt = 'no comments';
         } else {
-            if (this.props.comments.length === 0) {
+            if (this.props.caption.comments.length === 0) {
                 commentsTextPrompt = 'no comments';
             } else if (this.state.displayComments) {
                 commentsTextPrompt = 'hide comments';
             } else {
                 commentsTextPrompt =
-                    'view comments(' + this.props.comments.length + ')';
+                    'view comments(' + this.props.caption.comments.length + ')';
             }
         }
 
@@ -266,7 +262,7 @@ class Caption extends Component {
             return this.props.caption.comments.map((comment, index) => {
                 return (
                     <Comment
-                        currentUser={this.state.currentUser}
+                        currentUser={this.props.currentUser}
                         captionID={this.props.caption.id}
                         comment={comment}
                         key={index + comment}
@@ -279,8 +275,8 @@ class Caption extends Component {
     }
 
     getPointsString() {
-        let pointsString = this.state.totalVotes + " ";
-        this.state.totalVotes === 1
+        let pointsString = this.props.caption.total_votes + ' ';
+        this.props.caption.total_votes === 1
             ? (pointsString += 'point')
             : (pointsString += 'points');
         return pointsString;
@@ -296,9 +292,7 @@ class Caption extends Component {
                 <div className="w-100 pl-2">
                     <div className="d-flex">
                         <small>{this.props.caption.name}</small>
-                        <small>
-                            {this.getPointsString()}
-                        </small>
+                        <small>{this.getPointsString()}</small>
                         <small>
                             {this.getTimeTranspired(
                                 this.props.caption.created_at

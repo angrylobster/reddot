@@ -93,12 +93,12 @@ class App extends Component {
                 modal.setAttribute('aria-hidden', 'true');
                 modal.setAttribute('style', 'display: none');
                 document.getElementsByClassName('modal-backdrop')[0].remove();
-                this.setState({currentUser: response.data})
+                this.setState({ currentUser: response.data });
             })
             .catch(error => {
                 console.log(error);
                 this.setState({ loginError: 'Invalid username or password!' });
-            })
+            });
     }
 
     register(credentials) {
@@ -120,7 +120,7 @@ class App extends Component {
                 modal.setAttribute('aria-hidden', 'true');
                 modal.setAttribute('style', 'display: none');
                 document.getElementsByClassName('modal-backdrop')[0].remove();
-                this.setState({currentUser: response.data})
+                this.setState({ currentUser: response.data });
             })
             .catch(error => {
                 let errorObject = error.response.data.error;
