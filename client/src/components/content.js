@@ -11,7 +11,7 @@ class Content extends Component {
                     alt="Caption this"
                     style={{ 
                         // minWidth: '100%',
-                        minHeight: '500px',
+                        height: '500px',
                         objectFit: "cover",
                         objectPosition: '50% 50%'
                     }}

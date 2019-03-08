@@ -63,7 +63,7 @@ class Captions extends Component {
 
     render() {
         let height = '';
-        this.state.captions.length === 0 ? height = '200px' : height = '400px';
+        this.state.captions.length < 7 ? height = 50 + (50 * this.state.captions.length) + ' px' : height = '400px';
         return (
             <React.Fragment>
                 <div
