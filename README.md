@@ -1,24 +1,9 @@
-# README
+# Description
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+Reddot is a prototype for a community-consensus, social media posting app that allows users to write captions for movie screenshots. 
 
-Things you may want to cover:
+# Instructions
 
-* Ruby version
-
-* System dependencies
-
-* Configuration
-
-* Database creation
-
-* Database initialization
-
-* How to run the test suite
-
-* Services (job queues, cache servers, search engines, etc.)
-
-* Deployment instructions
-
-* ...
+* Users need to register an account to enable the app's functions
+* Captions and comments on captions can be upvoted/downvoted
+* The screenshots refresh every 24 hours
